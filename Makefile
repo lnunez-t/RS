@@ -6,7 +6,7 @@ BACKEND_DIR = backend
 # Lancer l'ensemble du projet
 up:
 	$(DOCKER_COMPOSE) up --build -d
-	@echo "🚀 Projet lancé ! Accède au frontend : http://localhost:3000"
+	@echo "🚀 Projet lancé ! Accède au frontend : http://localhost:5173"
 
 # Arrêter tous les conteneurs
 down:
