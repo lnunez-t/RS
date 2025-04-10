@@ -44,7 +44,7 @@ const CollectionsSection =  ({ children }: { children: React.ReactNode }) => {
                         <div className="w-[274px] h-[43px] mx-auto mb-[67px]">
                             <div className="relative w-[272px] h-[43px]">
                                 <div className="w-[269px] h-[43px] border border-solid border-white absolute left-0" />
-                                <div className="absolute w-[269px] h-[43px] top-0 left-[3px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-xl text-center">
+                                <div className="absolute w-[269px] h-[43px] top-[9px] left-[3px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-xl text-center">
                                     {collection.title}
                                 </div>
                             </div>

@@ -5,6 +5,7 @@ import Layout from './components/Layout' // ajuste le chemin si besoin
 import BestsellerSection from './components/BestsellerSection'
 import EngagementsSection from './components/EngagementsSection'
 import CollectionsSection from './components/CollectionsSection'
+import FeedbackSection from './components/FeedbackSection'
 
 export const metadata = {
   title: 'Restrospective Studio',
@@ -27,6 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CollectionsSection>
             {children}
         </CollectionsSection>
+        <FeedbackSection>
+            {children}
+        </FeedbackSection>
       </body>
     </html>
   )
