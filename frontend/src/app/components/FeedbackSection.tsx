@@ -23,7 +23,7 @@ const reviews = [
     },
 ];
 
-const renderStars = ({rating} : {rating: number}) => {
+const renderStars = (rating: number) => {
     return (
         <div className="flex">
             {
@@ -61,7 +61,39 @@ const FeedbackSection =  ({ children }: { children: React.ReactNode }) => {
                             produits upcycles 
                         </p>
                     </div>
-                    
+
+                    <Card className="w-full md:w-[880px] bg-[#faf2ea] rounded-[20px] border-none">
+                        <CardContent className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {reviews.map((review, index) => (
+                                    <Card
+                                    key={index}
+                                    className="bg-white rounded-[15px] border-none"
+                                >
+                                    <CardContent className="p-5">
+                                        <div className="mb-4">{renderStars(review.rating)}</div>
+                                        <div className="flex items-center mt-6">
+                                            <div className="w-9 h-9 bg-[#ffae9d] rounded-18px] flex items-center justify-center">
+                                                <User className="w-6 h-6 text-white" />
+                                            </div>
+                                            <span className="ml-2 font-bold text-sm text-[#392e2c] [font-family:'Playfair_Display-Bold', Helvetica]">
+                                                {review.name}
+                                            </span>
+                                        </div>
+
+                                        <p className="mt-4 font-bold text-[11px] text-[#ffae9d] [font-family:'Playfair_Display-Bold', Helvetica]">
+                                            {review.headline}
+                                        </p>
+
+                                        <p className="mt-2 font-bold text-[10px] text-[#392e2c] [font-family:'Playfair_Display-Bold', Helvetica]">
+                                            {review.content}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         <main>{children}</main>

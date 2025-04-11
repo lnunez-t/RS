@@ -10,7 +10,7 @@ const collections = [
     },
     {
         id: 2,
-        title: "CHOUCOUS",
+        title: "CHOUCHOUS",
         backgroundImage: "/chouchous.svg",
         headerText: "COLLECTIONS",
     },
