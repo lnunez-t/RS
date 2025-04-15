@@ -6,7 +6,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline'; // Si tu utilises Heroicons
 
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const NavbarSection = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       {/* Navbar */}
@@ -15,8 +15,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {/* Partie gauche - Liens vers les pages */}
           <div className="flex space-x-6">
             <Link href="/" className="hover:text-gray-300">ACCUEIL</Link>
-            <Link href="/about" className="hover:text-gray-300">A PROPOS</Link>
-            <Link href="/shop" className="hover:text-gray-300">BOUTIQUE</Link>
+            <Link href="/About" className="hover:text-gray-300">A PROPOS</Link>
+            <Link href="/Shop" className="hover:text-gray-300">BOUTIQUE</Link>
           </div>
 
           {/* Partie centrale - Logo */}
@@ -46,26 +46,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </nav>
 
-      <section className='w-full relative'>
-        <Card className='border-0 rounded-none'>
-          <CardContent className='p-0'>
-            <div className='relative w-full h-[545px]'>
-              <img className='w-full h-full object-cover' alt='sustainable fashion' src='/heroImg.svg'></img>
-              <div className='absolute inset-0 flex items-center justify-center'>
-                <div className="w-[910px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-[32px] text-center">
-                  &quot;Donner une nouvelle vie, c&apos;est creer un futur plus durable&quot;
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
       {/* Contenu principal */}
       <main>{children}</main>
     </div>
   );
 }
 
-export default Layout;
+export default NavbarSection;
 
