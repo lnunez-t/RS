@@ -2,11 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import {Card, CardContent} from "@/components/ui/card";
 import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline'; // Si tu utilises Heroicons
 
 
-const NavbarSection = ({ children }: { children: React.ReactNode }) => {
+const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div>
       {/* Navbar */}

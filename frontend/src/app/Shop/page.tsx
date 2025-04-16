@@ -7,7 +7,6 @@ import {
     PaginationLink,
 } from "@/components/ui/pagination";
 import {
-    ArrowRight,
     ChevronDown,
 } from "lucide-react";
 import React from "react";

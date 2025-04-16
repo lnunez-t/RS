@@ -31,7 +31,7 @@ const bestsellers = [
     }
 ];
 
-const BestsellerSection =  ({ children }: { children: React.ReactNode }) => {
+const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className="w-full max-w-[1213px] mx-auto py-12 relative">
             <h2 className="text-2xl font-bold text-[#392e2c] text-center mb-12 [font-family:'Playfair_Display-Bold', Helvetica]">

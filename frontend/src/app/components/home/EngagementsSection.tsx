@@ -18,7 +18,7 @@ const engagements = [
     },
 ];
 
-const EngagementsSection =  ({ children }: { children: React.ReactNode }) => {
+const EngagementsSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className="w-full py-10 bg-white">
             <div className="container mx-auto">

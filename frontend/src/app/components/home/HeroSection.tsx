@@ -1,7 +1,7 @@
 import React from "react";
 import {Card, CardContent} from "@/components/ui/card";
 
-const HeroSection =  ({ children }: { children: React.ReactNode }) => {
+const HeroSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className='w-full relative'>
         <Card className='border-0 rounded-none'>

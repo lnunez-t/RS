@@ -22,7 +22,7 @@ const collections = [
     },
 ];
 
-const CollectionsSection =  ({ children }: { children: React.ReactNode }) => {
+const CollectionsSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className="w-full flex flex-row">
             {collections.map((collection) => (

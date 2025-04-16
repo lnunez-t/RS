@@ -4,7 +4,7 @@ import {Input} from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 
-const NewsletterSection =  ({ children }: { children: React.ReactNode }) => {
+const NewsletterSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className="w-full py-16 bg-[#ccaea4]">
             <Card className="max-w-[1440px] mx-auto bg-transparent border-none shadow-none">

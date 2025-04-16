@@ -44,7 +44,7 @@ const renderStars = (rating: number) => {
     };
 
 
-const FeedbackSection =  ({ children }: { children: React.ReactNode }) => {
+const FeedbackSection =  ({ children }: { children?: React.ReactNode }) => {
     return (
         <section className="w-full py-12 bg-white">
             <div className="container mx-auto">
