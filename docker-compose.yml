@@ -12,17 +12,16 @@ services:
       - NODE_ENV=development
 
   backend:
-    build: ./backend
+    build: ./backend 
     ports:
-      - "5001:5000"
-    depends_on:
-      - mongo
+      - "4338:4338"
+    environment:
+      - PORT=4338
+      - MONGO_URI=${MONGO_URI}
     volumes:
       - ./backend:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo:27017/restrospective-studio
+    env_file:
+      - .env
 
   mongo:
     image: mongo:latest
