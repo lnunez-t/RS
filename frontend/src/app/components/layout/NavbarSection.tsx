@@ -34,11 +34,11 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
               <MagnifyingGlassIcon className="absolute top-2 right-2 h-5 w-5 text-black-400" />
             </div>
 
-            <Link href="/cart">
+            <Link href="/Cart">
               <ShoppingCartIcon className="h-6 w-6 text-black-400 hover:text-white" />
             </Link>
 
-            <Link href="/profile">
+            <Link href="/Profile">
               <UserIcon className="h-6 w-6 text-black-400 hover:text-white" />
             </Link>
           </div>

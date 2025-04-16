@@ -5,7 +5,17 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger.js');
 
+
+
+const cors = require('cors');
 const app = express();
+
+// Autoriser les requêtes depuis localhost:3000
+app.use(cors({
+    origin: 'http://localhost:3000', // autoriser cette origine
+    methods: ['GET', 'POST'], // autoriser certaines méthodes
+    allowedHeaders: ['Content-Type'], // autoriser certains headers
+}));
 
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -20,7 +30,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4338;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 app.use('/webhook', require('./routes/WebhookRoute'));
