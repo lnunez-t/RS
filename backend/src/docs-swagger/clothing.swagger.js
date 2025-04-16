@@ -97,7 +97,7 @@
  *         name: search
  *         schema:
  *           type: string
- *         description: Rechercher un vêtement par nom (ex: "t-shirt")
+ *           description: "Rechercher un vêtement par nom (ex: 't-shirt')"
  *     responses:
  *       200:
  *         description: Liste des vêtements
