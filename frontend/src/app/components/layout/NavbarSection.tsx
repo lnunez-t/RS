@@ -1,11 +1,31 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline'; // Si tu utilises Heroicons
 
 
 const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  const handleProfileClick = () => {
+    if (isLoggedIn) {
+      router.push("/Dashboard"); // ou la route de ton profil connecté
+    } else {
+      router.push("/Profile"); // page de connexion
+    }
+  };
+  
   return (
     <div>
       {/* Navbar */}
@@ -38,9 +58,9 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
               <ShoppingCartIcon className="h-6 w-6 text-black-400 hover:text-white" />
             </Link>
 
-            <Link href="/Profile">
+            <button onClick={handleProfileClick}>
               <UserIcon className="h-6 w-6 text-black-400 hover:text-white" />
-            </Link>
+            </button>
           </div>
         </div>
       </nav>

@@ -24,8 +24,8 @@ export default function ProfilePage() {
                 },
                 body: JSON.stringify({email, password}),
             });
-
             if (response.status === 200) {
+                localStorage.setItem("isLoggedIn", "true");
                 router.push("/");
             } else {
                 setError("Email ou mot de passe incorrect.");
