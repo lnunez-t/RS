@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {Card, CardContent} from "@/components/ui/card";
 import {
@@ -10,6 +12,7 @@ import {
     ChevronDown,
 } from "lucide-react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const products = [
     {
@@ -40,6 +43,7 @@ const filterOptions = [
 
 
 export default function ShopPage() {
+    const router = useRouter();
     return (
         <div className="bg-[#faf2ea] flex flex-row justify-center w-full">
             <div className="bg-[#faf2ea] overflow-hidden w-full max-w-[1440px] relative">
@@ -66,7 +70,11 @@ export default function ShopPage() {
 
                 <div className="mt-16 px-12 grid grid-cols-3 gap-x-16 gap-y-20">
                     {products.map((product) => (
-                        <div key={product.id} className="flex flex-col">
+                        <div 
+                            key={product.id} 
+                            className="cursor-pointer flex flex-col"
+                            onClick={() => router.push("/Product")}
+                        >
                             <Card className="w-[401px] rounded-none border-none shadow-none bg-transparent relative overflow-hidden">
                                 <CardContent className="p-0">
                                     <img

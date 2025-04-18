@@ -42,7 +42,7 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="p-0 h-[34px] w-[34px]"
+                                className="cursor-pointer p-0 h-[34px] w-[34px]"
                                 aria-label="Email"
                             >
                                 <MailIcon className="h-[34px] w-[34px] text-[#b39188]" />
@@ -50,7 +50,7 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="p-0 h-[34px] w-[34px]"
+                                className="cursor-pointer p-0 h-[34px] w-[34px]"
                                 aria-label="Instagram">
                                     <InstagramIcon className="h-[34px] w-[34px] text-[#b39188]" />
                             </Button>
@@ -63,7 +63,7 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                             <Button
                                 key={index}
                                 variant="link"
-                                className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
+                                className="cursor-pointer [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
                             >
                                 {link.text}
                             </Button>
@@ -75,7 +75,7 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                             <Button
                                 key={index}
                                 variant="link"
-                                className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
+                                className="cursor-pointer [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
                             >
                                 {link.text}
                             </Button>

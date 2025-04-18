@@ -33,9 +33,9 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Partie gauche - Liens vers les pages */}
           <div className="flex space-x-6">
-            <Link href="/" className="hover:text-gray-300">ACCUEIL</Link>
-            <Link href="/About" className="hover:text-gray-300">A PROPOS</Link>
-            <Link href="/Shop" className="hover:text-gray-300">BOUTIQUE</Link>
+            <Link href="/" className="hover:text-[#ccaea4]">ACCUEIL</Link>
+            <Link href="/About" className="hover:text-[#ccaea4]">A PROPOS</Link>
+            <Link href="/Shop" className="hover:text-[#ccaea4]">BOUTIQUE</Link>
           </div>
 
           {/* Partie centrale - Logo */}
@@ -55,11 +55,11 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
             </div>
 
             <Link href="/Cart">
-              <ShoppingCartIcon className="h-6 w-6 text-black-400 hover:text-white" />
+              <ShoppingCartIcon className="h-9 w-6 text-black-400 hover:text-[#ccaea4]" />
             </Link>
 
             <button onClick={handleProfileClick}>
-              <UserIcon className="h-6 w-6 text-black-400 hover:text-white" />
+              <UserIcon className="cursor-pointer h-6 w-6 text-black-400 hover:text-[#ccaea4]" />
             </button>
           </div>
         </div>

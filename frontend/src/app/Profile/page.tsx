@@ -26,7 +26,7 @@ export default function ProfilePage() {
             });
             if (response.status === 200) {
                 localStorage.setItem("isLoggedIn", "true");
-                router.push("/");
+                router.push("/Dashboard");
             } else {
                 setError("Email ou mot de passe incorrect.");
             }

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {Card, CardContent, CardFooter} from "@/components/ui/card";
 import {
@@ -9,6 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const bestsellers = [
     {
@@ -32,6 +35,7 @@ const bestsellers = [
 ];
 
 const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
+    const router = useRouter();
     return (
         <section className="w-full max-w-[1213px] mx-auto py-12 relative">
             <h2 className="text-2xl font-bold text-[#392e2c] text-center mb-12 [font-family:'Playfair_Display-Bold', Helvetica]">
@@ -56,7 +60,11 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                                     </h3>
                                 </CardContent>
                                 <CardFooter className="flex justify-center pt-0">
-                                    <Button variant="outline" className="w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors">
+                                    <Button 
+                                        variant="outline" 
+                                        className="w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
+                                        onClick={() => router.push("/Product")}
+                                    >
                                         Decouvrir
                                     </Button>
                                 </CardFooter>

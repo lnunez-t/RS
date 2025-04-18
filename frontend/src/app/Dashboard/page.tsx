@@ -16,13 +16,18 @@ export default function DashboardPage() {
                 <div className="w-full h-[59px] bg-[#ccaea4]">
                     <div className="flex justify-center items-center h-full">
                         {profileNavItems.map((item, index) => (
-                            <div key={index} className="relative mx-10">
-                                <div className={`[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base text-center ${index === 0 ? "underline decoration-white decoration-2 underline-offset-4" : ""}`}>
+                            <div key={index} 
+                                className="relative mx-10 cursor-pointer hover:border-b-2 hover:border-[#ffae9d] pb-1 "
+                                onClick={() => {
+                                    if (item === "Deconnexion") {
+                                        localStorage.setItem("IsLoggedIn", "false");
+                                        router.push("/Profile");
+                                    }
+                                }}>
+                                <div className={`[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base text-center`}>
                                     {item}
                                 </div>
-                                {index === 0 && (
-                                    <Separator className="w-[124px] h-[3px] absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-white" />
-                                )}
+                                
                             </div>
                         ))}
                     </div>
@@ -44,7 +49,7 @@ export default function DashboardPage() {
 
                     <Button 
                         onClick={() => router.push("/Shop")}
-                        className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[37px] px-6">
+                        className="cursor-pointer bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[37px] px-6">
                         <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base">
                             Explorer nos produits
                         </span>

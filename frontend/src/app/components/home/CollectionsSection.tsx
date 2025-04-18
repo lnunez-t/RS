@@ -1,5 +1,8 @@
+"use client";
+
 import {Card, CardContent} from "@/components/ui/card";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const collections = [
     {
@@ -23,34 +26,41 @@ const collections = [
 ];
 
 const CollectionsSection =  ({ children }: { children?: React.ReactNode }) => {
+    const router = useRouter();
     return (
         <section className="w-full flex flex-row">
             {collections.map((collection) => (
-                <Card
+                <div
                     key={collection.id}
-                    className="relative w-full h-[644px] rounded-none border-none"
-                    style={{
-                        backgroundImage: `url(${collection.backgroundImage})`,
-                        backgroundSize: "100% 100%",
-                      }}
+                    onClick={() => router.push("/Shop")}
+                    className="cursor-pointer w-full"
                 >
-                    <CardContent className="p-0 h-full flex flex-col justify-between">
-                        {collection.isHeader && (
-                            <div className="w-[269px] mt-4 mx-auto [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-2xl text-center">
-                                {collection.headerText}
-                            </div>
-                        )}
+                    <Card
+                        key={collection.id}
+                        className="relative w-full h-[644px] rounded-none border-none"
+                        style={{
+                            backgroundImage: `url(${collection.backgroundImage})`,
+                            backgroundSize: "100% 100%",
+                        }}
+                    >
+                        <CardContent className="p-0 h-full flex flex-col justify-between">
+                            {collection.isHeader && (
+                                <div className="w-[269px] mt-4 mx-auto [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-2xl text-center">
+                                    {collection.headerText}
+                                </div>
+                            )}
 
-                        <div className="w-[274px] h-[43px] mx-auto mb-[67px]">
-                            <div className="relative w-[272px] h-[43px]">
-                                <div className="w-[269px] h-[43px] border border-solid border-white absolute left-0" />
-                                <div className="absolute w-[269px] h-[43px] top-[9px] left-[3px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-xl text-center">
-                                    {collection.title}
+                            <div className="w-[274px] h-[43px] mx-auto mb-[67px]">
+                                <div className="relative w-[272px] h-[43px]">
+                                    <div className="w-[269px] h-[43px] border border-solid border-white absolute left-0" />
+                                    <div className="absolute w-[269px] h-[43px] top-[9px] left-[3px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-xl text-center">
+                                        {collection.title}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </div>
             ))}
         <main>{children}</main>
         </section>
