@@ -3,7 +3,6 @@
 import { Package } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 
 const profileNavItems = ["Mes commandes", "Mes informations", "Deconnexion"];
