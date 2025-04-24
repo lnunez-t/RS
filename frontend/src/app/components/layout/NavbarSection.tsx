@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useCart } from "@/lib/hooks/useCart";
 
 import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline'; // Si tu utilises Heroicons
 
@@ -12,6 +13,7 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/reac
 const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { openCart } = useCart();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -54,9 +56,10 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
               <MagnifyingGlassIcon className="absolute top-2 right-2 h-5 w-5 text-black-400" />
             </div>
 
-            <Link href="/Cart">
-              <ShoppingCartIcon className="h-9 w-6 text-black-400 hover:text-[#ccaea4]" />
-            </Link>
+            <button onClick={openCart} className="p-2">
+              <ShoppingCartIcon className="cursor-pointer w-5 h-5 text-[#392e2c]" />
+              <Link href="/CartPage" className="ml-4 text-sm">Voir le panier</Link>
+            </button>
 
             <button onClick={handleProfileClick}>
               <UserIcon className="cursor-pointer h-6 w-6 text-black-400 hover:text-[#ccaea4]" />

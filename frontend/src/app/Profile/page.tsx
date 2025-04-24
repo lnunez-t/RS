@@ -92,8 +92,9 @@ export default function ProfilePage() {
                             Nouveau ?
                         </span>
                         <Button
+                            onClick={() => router.push("/CreateAccount")}
                             variant="outline"
-                            className="h-[38px] rounded-[10px] border-2 border-solid border-[#ccaea4] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base"
+                            className="cursor-pointer h-[38px] rounded-[10px] border-2 border-solid border-[#ccaea4] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base"
                         >
                             Creer un compte
                         </Button>

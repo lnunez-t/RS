@@ -4,6 +4,7 @@ import React from 'react'
 import NavbarSection from './components/layout/NavbarSection'
 import NewsletterSection from './components/layout/NewsletterSection'
 import FooterSection from './components/layout/FooterSection'
+import CartDrawer from './components/layout/CartDrawer';
 
 export const metadata = {
   title: 'Restrospective Studio',
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr">
       <body>
         <NavbarSection />
+        <CartDrawer />
         {children}
         <NewsletterSection />
         <FooterSection />
