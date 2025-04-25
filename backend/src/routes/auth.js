@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer');
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password,firstName,lastName } = req.body;
 
   try {
     const existing = await User.findOne({ email });
@@ -20,6 +20,8 @@ router.post('/register', async (req, res) => {
     const user = new User({
       email,
       password,
+      firstName,
+      lastName,
       isVerified: false,
       emailVerifyToken
     });
