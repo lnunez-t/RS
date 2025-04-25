@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -7,13 +9,9 @@ import {
     Minus,
     Plus,
 } from "lucide-react";
-import React from "react";
-
-const mainProduct = {
-    name: 'La "bon chic, bon genre"',
-    price: "60 €",
-    description: "Lorem ipsum dolor sit amet. Ea possimus iure ut quas dolorum aut repellat dolores ut provident galisum in omnis iste. Sit pariatur voluptas aut dolor delectus sit dolorem quia! Qui consectetur illo aut fugiat deleniti est minima rerum et repellat beatae ut dolorem nemo qui ipsum inventore ut voluptates eius.\n\nLorem ipsum dolor sit amet. Ea possimus iure ut quas dolorum aut repellat dolores ut provident galisum in omnis iste. Sit pariatur voluptas aut dolor delectus sit dolorem quia! Qui consectetur illo aut fugiat deleniti est minima rerum et repellat beatae ut dolorem nemo qui ipsum inventore ut voluptates eius."
-};
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useProduct } from "@/lib/contexts/ProductContext";
 
 const relatedProducts = [
     {
@@ -43,6 +41,16 @@ const relatedProducts = [
 ];
 
 export default function ProductPage() {
+    const { selectProduct, selectedProduct } = useProduct();
+    const router = useRouter();
+     
+    const handleProductClick = (product: any) => {
+        selectProduct(product);  // Met à jour le produit sélectionné dans le contexte
+        router.push("/Product");  // Navigue vers la page du produit
+    };
+
+    if (!selectedProduct) return <div>Produit non trouvé</div>;
+
     return (
         <div className="bg-[#faf2ea] min-h-screen">
             <main className="max-w-7xl mx-auto px-4 py-6">
@@ -50,7 +58,7 @@ export default function ProductPage() {
                     <Button
                         variant="outline"
                         size="sm"
-                        className="flex items-center gap-2 rounded-[5px] border-2 border-[#392e2c] h-7 w-7 p-0"
+                        className="cursor-pointer flex items-center gap-2 rounded-[5px] border-2 border-[#392e2c] h-7 w-7 p-0"
                     >
                         <ArrowLeft className="h-5 w-5 text-[#392e2c]" />
                     </Button>
@@ -64,9 +72,9 @@ export default function ProductPage() {
                         <div className="flex gap-4 mb-4">
                             <div className="flex flex-col gap-4">
                                 <img
-                                    className="w-[90px] h-[90px] object-cover"
-                                    alt="Banane main"
-                                    src="/banane3.svg"
+                                    className="w-[350px] h-[350px] object-cover ml-12"
+                                    alt={selectedProduct.name}
+                                    src={selectedProduct.image}
                                 />
                             </div>
                         </div>
@@ -74,10 +82,10 @@ export default function ProductPage() {
 
                     <div className="md:w-1/2">
                         <h1 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl text-center mb-2">
-                            {mainProduct.name}
+                            {selectedProduct.name}
                         </h1>
                         <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-xl text-center mb-4">
-                            {mainProduct.price}
+                            {selectedProduct.price}
                         </p>
 
                         <div className="text-center mb-6">
@@ -90,11 +98,7 @@ export default function ProductPage() {
                         </div>
 
                         <div className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-[10px] text-justify mb-8">
-                            {mainProduct.description.split("\n\n").map((paragraph, index) => (
-                                <p key={index} className="mb-4">
-                                    {paragraph}
-                                </p>
-                            ))}
+                            <p>{selectedProduct.description}</p>
                         </div>
 
                         <div className="mb-6">
@@ -142,26 +146,32 @@ export default function ProductPage() {
                     <div className="relative">
                         <div className="flex justify-center gap-4">
                             {relatedProducts.map((product) => (
-                                <Card
-                                    key={product.id}
-                                    className="w-[200px] bg-transparent border-none"
+                                <div
+                                key={product.id}
+                                onClick={() => handleProductClick(product)}
+                                className="cursor-pointer w-full"
                                 >
-                                    <CardContent className="p-0">
-                                        <img
-                                            className="w-[200px] h-[200px] object-cover"
-                                            alt={product.name}
-                                            src={product.image}
-                                        />
-                                    </CardContent>
-                                    <CardFooter className="flex flex-col items-center p-0 pt-2">
-                                        <h3 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm text-center">
-                                            {product.name}
-                                        </h3>
-                                        <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm">
-                                            {product.price}
-                                        </p>
-                                    </CardFooter>
-                                </Card>
+                                    <Card
+                                        key={product.id}
+                                        className="w-[200px] bg-transparent border-none"
+                                    >
+                                        <CardContent className="p-0">
+                                            <img
+                                                className="w-[200px] h-[200px] object-cover"
+                                                alt={product.name}
+                                                src={product.image}
+                                            />
+                                        </CardContent>
+                                        <CardFooter className="flex flex-col items-center p-0 pt-2">
+                                            <h3 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm text-center">
+                                                {product.name}
+                                            </h3>
+                                            <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm">
+                                                {product.price}
+                                            </p>
+                                        </CardFooter>
+                                    </Card>
+                                </div>
                             ))}
                         </div>
 

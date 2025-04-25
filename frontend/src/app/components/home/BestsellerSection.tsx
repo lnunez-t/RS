@@ -12,6 +12,7 @@ import {
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useProduct } from "@/lib/contexts/ProductContext";
 
 const bestsellers = [
     {
@@ -36,6 +37,12 @@ const bestsellers = [
 
 const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
     const router = useRouter();
+    const { selectProduct } = useProduct(); 
+
+    const handleProductClick = (product: any) => {
+        selectProduct(product);  // Met à jour le produit sélectionné dans le contexte
+        router.push("/Product");  // Navigue vers la page du produit
+    };
     return (
         <section className="w-full max-w-[1213px] mx-auto py-12 relative">
             <h2 className="text-2xl font-bold text-[#392e2c] text-center mb-12 [font-family:'Playfair_Display-Bold', Helvetica]">
@@ -63,7 +70,7 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                                     <Button 
                                         variant="outline" 
                                         className="w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
-                                        onClick={() => router.push("/Product")}
+                                        onClick={() => handleProductClick(product)}
                                     >
                                         Decouvrir
                                     </Button>

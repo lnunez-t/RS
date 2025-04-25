@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useProduct } from "@/lib/contexts/ProductContext";
 
 const products = [
     {
@@ -44,6 +45,12 @@ const filterOptions = [
 
 export default function ShopPage() {
     const router = useRouter();
+    const { selectProduct } = useProduct();
+
+    const handleProductClick = (product: any) => {
+        selectProduct(product);  // Met à jour le produit sélectionné dans le contexte
+        router.push("/Product");  // Navigue vers la page du produit
+    };
     return (
         <div className="bg-[#faf2ea] flex flex-row justify-center w-full">
             <div className="bg-[#faf2ea] overflow-hidden w-full max-w-[1440px] relative">
@@ -73,7 +80,7 @@ export default function ShopPage() {
                         <div 
                             key={product.id} 
                             className="cursor-pointer flex flex-col"
-                            onClick={() => router.push("/Product")}
+                            onClick={() => handleProductClick(product)}
                         >
                             <Card className="w-[401px] rounded-none border-none shadow-none bg-transparent relative overflow-hidden">
                                 <CardContent className="p-0">

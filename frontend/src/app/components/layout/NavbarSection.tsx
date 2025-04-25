@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import CartDrawer from "@/app/components/layout/CartDrawer"; 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useCart } from "@/lib/hooks/useCart";
@@ -13,7 +14,8 @@ import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/reac
 const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { openCart } = useCart();
+  const { isCartOpen, openCart, closeCart } = useCart();
+
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -56,9 +58,8 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
               <MagnifyingGlassIcon className="absolute top-2 right-2 h-5 w-5 text-black-400" />
             </div>
 
-            <button onClick={openCart} className="p-2">
-              <ShoppingCartIcon className="cursor-pointer w-5 h-5 text-[#392e2c]" />
-              <Link href="/CartPage" className="ml-4 text-sm">Voir le panier</Link>
+            <button onClick={openCart} className="p-2 flex items-center">
+              <ShoppingCartIcon className="cursor-pointer w-5 h-5 text-[#392e2c] hover:text-[#ccaea4]" />
             </button>
 
             <button onClick={handleProfileClick}>
@@ -67,6 +68,7 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
           </div>
         </div>
       </nav>
+      <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
 
       {/* Contenu principal */}
       <main>{children}</main>
