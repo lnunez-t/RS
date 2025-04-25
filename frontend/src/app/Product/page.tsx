@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useProduct } from "@/lib/contexts/ProductContext";
+import { useCartContext } from "@/lib/contexts/CartContext";
 
 const relatedProducts = [
     {
@@ -42,7 +43,21 @@ const relatedProducts = [
 
 export default function ProductPage() {
     const { selectProduct, selectedProduct } = useProduct();
+    const { addToCart } = useCartContext();
     const router = useRouter();
+
+    const handleAddToCart = () => {
+        if (selectedProduct) {
+            addToCart({
+                id: selectedProduct.id,
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                quantity: selectedProduct.quantity,
+                image: selectedProduct.image,
+            });
+            alert("Produit ajouté au panier");
+        }
+    };
      
     const handleProductClick = (product: any) => {
         selectProduct(product);  // Met à jour le produit sélectionné dans le contexte
@@ -131,7 +146,10 @@ export default function ProductPage() {
                         </div>
 
                         <div className="flex justify-center mt-8">
-                            <Button className="w-[99px] h-[25px] rounded-[20px] bg-[#ffae9d] border border-[#ccaea4] shadow-[0px_0px_4px_2px_#b39188] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-white text-[10px]">
+                            <Button 
+                                onClick={handleAddToCart}
+                                className="cursor-pointer w-[99px] h-[25px] rounded-[20px] bg-[#ffae9d] border border-[#ccaea4] shadow-[0px_0px_4px_2px_#b39188] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-white text-[10px]"
+                            >
                                 Ajouter au panier
                             </Button>
                         </div>

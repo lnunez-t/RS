@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
+import { useCartContext } from "@/lib/contexts/CartContext";
 
 const mainProduct = {
     name: 'La "bon chic, bon genre"',
@@ -16,6 +17,7 @@ const mainProduct = {
 };
 
 export default function CartPage() {
+    const { cartItems } = useCartContext();
     return (
         <Card className="md:w-1/3 bg-white border border-black md:ml-8 mt-8 md:mt-0">
             <CardContent className="p-6">
