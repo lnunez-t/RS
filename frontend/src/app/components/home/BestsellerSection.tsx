@@ -69,7 +69,7 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                                 <CardFooter className="flex justify-center pt-0">
                                     <Button 
                                         variant="outline" 
-                                        className="w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
+                                        className="cursor-pointer w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
                                         onClick={() => handleProductClick(product)}
                                     >
                                         Decouvrir

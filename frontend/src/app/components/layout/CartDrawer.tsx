@@ -5,10 +5,14 @@ import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCart } from "@/lib/hooks/useCart";
 import { Minus, Plus } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { cartItems, removeFromCart } = useCart(); // adapte selon ta logique
-
+  const router = useRouter();
   return (
     <div
       className={`fixed inset-0 z-50 transition-transform duration-300 ease-in-out ${
@@ -67,7 +71,20 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                 </button>
               </li>
             ))}
+            <Separator className="mx-auto w-[95%]" />
+
+            <CardFooter className="flex flex-col p-6">
+                <Button 
+                  onClick={() => router.push("/Payment")}
+                  className="cursor-pointer w-full bg-[#392e2c] rounded-[20px] h-10 [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-white text-base mb-2">
+                    Payer - EUR 60 €
+                </Button>
+                <p className="[font-family:'Playfair_Display-Regular', Helvetica] font-normal text-[#392e2c] text-[10px] text-center">
+                    Taxes et frais de livraison calcules lors du paiement
+                </p>
+            </CardFooter>
           </ul>
+          
         ) : (
           <p>Votre panier est vide.</p>
         )}
