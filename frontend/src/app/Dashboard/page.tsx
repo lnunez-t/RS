@@ -2,6 +2,7 @@
 
 import { Package } from "lucide-react";
 import React from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -9,6 +10,22 @@ const profileNavItems = ["Mes commandes", "Mes informations", "Deconnexion"];
 
 export default function DashboardPage() {
     const router = useRouter();
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem("IsLoggedIn");
+        if (isLoggedIn !== "true") {
+            router.push("/Profile");
+        } else {
+            setIsChecking(false);  // Fin de la vérification, l'utilisateur est connecté
+        }
+    }, [router]);
+
+    if (isChecking) {
+        // Pendant la vérification, tu peux afficher un petit loader ou rien du tout
+        return <div className="h-screen flex items-center justify-center">Chargement...</div>;
+    }
+
     return (
         <div className="bg-[#faf2ea] flex flex-row justify-center w-full">
             <div className="bg-[#faf2ea] overflow-hidden w-[1440px] relative">

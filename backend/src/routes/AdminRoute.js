@@ -6,7 +6,7 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
 // Route to add a new admin
-router.post('/add', async (req, res) => {
+/* router.post('/add', async (req, res) => {
   try {
     const { email, password, name, role } = req.body;
     const newAdmin = new UserAdmin({ email, password, name, role });
@@ -15,7 +15,7 @@ router.post('/add', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to add admin', details: error.message });
   }
-});
+}); */
 
 // Route to authenticate an admin
 router.post('/login', async (req, res) => {

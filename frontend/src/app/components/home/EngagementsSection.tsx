@@ -31,10 +31,12 @@ const EngagementsSection =  ({ children }: { children?: React.ReactNode }) => {
                         <Card key={index} className="border-none shadow-none w-[269px]">
                             <CardContent className="p-0 flex flex-col items-center">
                                 <div className="relative mb-6">
-                                    <div className="w-[120px] h-[120px] rounded-full border-[3px] border-solid border-[#ffae9d] blur-[2px]" />
-                                    <div className="font-['Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
-                                        {engagement.icon}
+                                    <div className=" w-[100px] h-[100px] rounded-full border-[3px] border-solid border-[#ffae9d]">
+                                        <div className="font-['Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
+                                            {engagement.icon}
+                                        </div>
                                     </div>
+                                    
                                 </div>
                                 <h3 className="font-['Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
                                     {engagement.title}

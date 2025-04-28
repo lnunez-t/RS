@@ -50,7 +50,8 @@ export default function CreateAccount() {
                 },
                 body: JSON.stringify({email, password}),
             });
-            if (response.status === 200) {
+            if (response.status === 201) {
+                setError("Un email de vérification a été envoyé.");
                 router.push("/Profile");
             } else {
                 setError("L'utilisateur existe deja.");
