@@ -2,17 +2,18 @@ import { Button } from "@/components/ui/button";
 import {Separator} from "@/components/ui/separator";
 import {InstagramIcon, Mail as MailIcon} from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 const centerLinks = [
-    {text: "Nous contacter", href: "#"},
-    {text: "FAQ", href: "#"},
-    {text: "Conditions d'Utilisation", href: "#"},
+    {text: "Nous contacter", href: "/Contact"},
+    {text: "FAQ", href: "/FAQ"},
+    {text: "Conditions d'Utilisation", href: "/CondUtil"},
 ];
 
 const rightLinks = [
-    {text: "Politique de Livraison", href: "#"},
-    {text: "Politique Echanges & Retours", href: "#"},
-    {text: "Politique de Confidentialite", href: "#"},
+    {text: "Politique de Livraison", href: "DelivPolicy"},
+    {text: "Politique Echanges & Retours", href: "Returns"},
+    {text: "Politique de Confidentialite", href: "ConfidPolicy"},
 ];
 
 const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
@@ -44,15 +45,28 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                                 size="icon"
                                 className="cursor-pointer p-0 h-[34px] w-[34px]"
                                 aria-label="Email"
+                                asChild
                             >
-                                <MailIcon className="h-[34px] w-[34px] text-[#b39188]" />
+                                <a href="mailto:retrospectivestudio.shop@gmail.com">
+                                    <MailIcon className="h-[34px] w-[34px] text-[#b39188]" />
+                                </a>
+                                
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="cursor-pointer p-0 h-[34px] w-[34px]"
-                                aria-label="Instagram">
+                                aria-label="Instagram"
+                                asChild
+                            >
+                                <a
+                                    href="https://www.instagram.com/retrospective.studio/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <InstagramIcon className="h-[34px] w-[34px] text-[#b39188]" />
+                                </a>
+                                    
                             </Button>
 
                         </div>
@@ -64,8 +78,12 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                                 key={index}
                                 variant="link"
                                 className="cursor-pointer [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
+                                asChild
                             >
-                                {link.text}
+                                <Link href={link.href}>
+                                    {link.text}
+                                </Link>
+                                
                             </Button>
                         ))}
                     </div>
@@ -76,8 +94,11 @@ const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
                                 key={index}
                                 variant="link"
                                 className="cursor-pointer [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#b39188] text-xs text-center md:text-left tracking-[0] leading-[normal] h-[26px] p-0 mb-2"
+                                asChild
                             >
-                                {link.text}
+                                <Link href={link.href}>
+                                    {link.text}
+                                </Link>
                             </Button>
                         ))}
                     </div>
