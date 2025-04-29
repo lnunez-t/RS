@@ -54,7 +54,7 @@ const FeedbackSection =  ({ children }: { children?: React.ReactNode }) => {
 
                 <div className="flex flex-col md:flex-row gap-8 items-center">
                     <div className="w-[286px] h-[286px] bg-[#faf2ea] rounded-full flex flex-col items-center justify-center">
-                        <p className="text-8xl font-bold text-[#ffae9d] text-center [font-family:'Playfair_Display-Bold', Helvetica] [text-shadow:0px_4px_4px_#00000040]">
+                        <p className="text-8xl font-bold text-[#ffae9d] text-center [font-family:'Playfair_Display-Bold', Helvetica]">
                             42
                         </p>
                         <p className="text-xl font-bold text-[#392e2c] text-center mt-2 [font-family:'Playfair_Display-Bold', Helvetica]">
@@ -73,7 +73,7 @@ const FeedbackSection =  ({ children }: { children?: React.ReactNode }) => {
                                     <CardContent className="p-5">
                                         <div className="mb-4">{renderStars(review.rating)}</div>
                                         <div className="flex items-center mt-6">
-                                            <div className="w-9 h-9 bg-[#ffae9d] rounded-18px] flex items-center justify-center">
+                                            <div className="w-9 h-9 bg-[#ffae9d] rounded-[18px] flex items-center justify-center">
                                                 <User className="w-6 h-6 text-white" />
                                             </div>
                                             <span className="ml-2 font-bold text-sm text-[#392e2c] [font-family:'Playfair_Display-Bold', Helvetica]">

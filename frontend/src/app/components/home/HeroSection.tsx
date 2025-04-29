@@ -6,7 +6,7 @@ const HeroSection =  ({ children }: { children?: React.ReactNode }) => {
         <section className='w-full relative'>
         <Card className='border-0 rounded-none'>
           <CardContent className='p-0'>
-            <div className='relative w-full h-[545px]'>
+            <div className='relative w-full h-full'>
               <img className='w-full h-full object-cover' alt='sustainable fashion' src='/heroImg.svg'></img>
               <div className='absolute inset-0 flex items-center justify-center'>
                 <div className="w-[910px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-[32px] text-center">

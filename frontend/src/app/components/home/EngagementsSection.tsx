@@ -6,15 +6,15 @@ import React from "react";
 const engagements = [
     {
         title: "Fabrication eco-responsable",
-        icon: <Leaf className="h-16 w-16 text-[#392e2c]" />,
+        icon: <Leaf className="h-12 w-12 text-[#ccaea4]" />,
     },
     {
         title: "Produits faits main",
-        icon: <Heart className="h-16 w-16 text-[#392e2c]" />,
+        icon: <Heart className="h-12 w-12 text-[#ccaea4]" />,
     },
     {
         title: "Reduction de l'empreinte carbone",
-        icon: <Footprints className="h-16 w-16 text-[#392e2c]" />,
+        icon: <Footprints className="h-12 w-12 text-[#ccaea4]" />,
     },
 ];
 
@@ -30,15 +30,12 @@ const EngagementsSection =  ({ children }: { children?: React.ReactNode }) => {
                     {engagements.map((engagement, index) => (
                         <Card key={index} className="border-none shadow-none w-[269px]">
                             <CardContent className="p-0 flex flex-col items-center">
-                                <div className="relative mb-6">
-                                    <div className=" w-[100px] h-[100px] rounded-full border-[3px] border-solid border-[#ffae9d]">
-                                        <div className="font-['Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
-                                            {engagement.icon}
-                                        </div>
-                                    </div>
-                                    
+                                <div className="relative mb-6 ">
+                                    <div className="w-[100px] h-[100px] rounded-full border-[3px] border-[#ffae9d] flex items-center justify-center">
+                                        {engagement.icon}
+                                    </div>        
                                 </div>
-                                <h3 className="font-['Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
+                                <h3 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base text-center">
                                     {engagement.title}
                                 </h3>
                             </CardContent>

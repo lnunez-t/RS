@@ -33,7 +33,7 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="bg-white-800 text-black p-4">
+      <nav className="bg-white text-black p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Partie gauche - Liens vers les pages */}
           <div className="flex space-x-6">
@@ -46,7 +46,7 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
           <div className="flex-1 text-center">
             <Link href="/">
               <span>
-                <Image src="/logo.svg" alt="Logo" className="mx-auto" width={120} height={60} />
+                <Image src="/logo1.png" alt="Logo" className="mx-auto" width={200} height={60} />
               </span>
             </Link>
           </div>
@@ -63,7 +63,7 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
             </button>
 
             <button onClick={handleProfileClick}>
-              <UserIcon className="cursor-pointer h-6 w-6 text-black-400 hover:text-[#ccaea4]" />
+              <UserIcon className="cursor-pointer h-5 w-6 text-black-400 hover:text-[#ccaea4]" />
             </button>
           </div>
         </div>

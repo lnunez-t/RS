@@ -27,41 +27,42 @@ const collections = [
 
 const CollectionsSection =  ({ children }: { children?: React.ReactNode }) => {
     const router = useRouter();
+
     return (
-        <section className="w-full flex flex-row">
+        <section className="w-full ">
+            <div className="flex w-full">
             {collections.map((collection) => (
                 <div
                     key={collection.id}
-                    onClick={() => router.push("/Shop")}
-                    className="cursor-pointer w-full"
+                    className="w-1/3 relative"
                 >
                     <Card
-                        key={collection.id}
-                        className="relative w-full h-[644px] rounded-none border-none"
+                        className="relative h-[644px] rounded-none border-none"
                         style={{
                             backgroundImage: `url(${collection.backgroundImage})`,
-                            backgroundSize: "100% 100%",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
                         }}
                     >
-                        <CardContent className="p-0 h-full flex flex-col justify-between">
-                            {collection.isHeader && (
-                                <div className="w-[269px] mt-4 mx-auto [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-2xl text-center">
+                        <CardContent className="p-0 h-full flex flex-col items-center justify-between">
+                            {collection.headerText && (
+                                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-white text-3xl font-bold text-center z-10 [font-family:'Playfair_Display-Bold',Helvetica]">
                                     {collection.headerText}
                                 </div>
                             )}
-
-                            <div className="w-[274px] h-[43px] mx-auto mb-[67px]">
-                                <div className="relative w-[272px] h-[43px]">
-                                    <div className="w-[269px] h-[43px] border border-solid border-white absolute left-0" />
-                                    <div className="absolute w-[269px] h-[43px] top-[9px] left-[3px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-xl text-center">
-                                        {collection.title}
-                                    </div>
-                                </div>
-                            </div>
+                            <div className="flex-grow" />
+                            <button
+                            onClick={() => router.push("/Shop")}
+                            className="cursor-pointer mb-[60px] w-[269px] h-[43px] border border-white text-white text-xl font-bold text-center [font-family:'Playfair_Display-Bold',Helvetica] hover:bg-white hover:text-[#392e2c] transition duration-300"
+                            >
+                            {collection.title}
+                            </button>
                         </CardContent>
                     </Card>
                 </div>
             ))}
+            </div>
+            
         <main>{children}</main>
         </section>
     );

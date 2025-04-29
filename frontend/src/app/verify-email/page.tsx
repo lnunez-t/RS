@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 
-const VerifyEmail = () => {
+const VerifyEmailContent = () => {
   const [status, setStatus] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,5 +50,11 @@ const VerifyEmail = () => {
     </div>
   );
 };
+
+const VerifyEmail = () => (
+  <Suspense fallback={<div>Chargement...</div>}>
+    <VerifyEmailContent />
+  </Suspense>
+);
 
 export default VerifyEmail;

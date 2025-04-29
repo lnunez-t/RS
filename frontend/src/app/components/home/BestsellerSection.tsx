@@ -17,7 +17,7 @@ import { useProduct } from "@/lib/contexts/ProductContext";
 const bestsellers = [
     {
         id: 1,
-        name: "Intemporelle",
+        name: "L'intemporelle",
         image: "/banane1.svg",
         alt: "Banane intemporelle",
     },
@@ -29,7 +29,7 @@ const bestsellers = [
     },
     {
         id: 3,
-        name: "La bon chic, bon genre",
+        name: 'La "bon chic, bon genre"',
         image: "/banane3.svg",
         alt: "Banane chic",
     }
@@ -53,7 +53,7 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                 <CarouselContent>
                     {bestsellers.map((product) => (
                         <CarouselItem key={product.id} className="md:basis-1/3">
-                            <Card className="border-none shadow-none">
+                            <Card className="border-none shadow-none bg-transparent">
                                 <CardContent className="p-0 flex flex-col items-center">
                                     <div className="w-[246px] h-[246px] mb-4">
                                         <img
@@ -62,14 +62,14 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                                         className="w-full h-full object-cover"
                                         />
                                     </div>
-                                    <h3 className="w-[246px] h-[43px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xl text-center mb-2">
+                                    <h3 className="w-[246px] h-[43px] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xl text-center">
                                         {product.name}
                                     </h3>
                                 </CardContent>
                                 <CardFooter className="flex justify-center pt-0">
                                     <Button 
                                         variant="outline" 
-                                        className="cursor-pointer w-[123px] h-10 bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
+                                        className="cursor-pointer w-[123px] h-10 rounded-[4px] bg-[#faf2ea] border-[#ffae9d] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[15px] hover:bg-[#ffae9d] hover:text-white transition-colors"
                                         onClick={() => handleProductClick(product)}
                                     >
                                         Decouvrir
@@ -79,12 +79,21 @@ const BestsellerSection =  ({ children }: { children?: React.ReactNode }) => {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselPrevious className="left-[-60px] bg-transparent border-none hover:bg-transparent shadow-none">
-                    <ChevronLeft className="h-9 w-9 text-[#392e2c]" />
-                </CarouselPrevious>
-                <CarouselNext className="right-[-60px] bg-transparent border-none hover:bg-transparent shadow-none">
-                    <ChevronRight className="h-9 w-9 text-[#392e2c]" />
-                </CarouselNext>
+                <Button
+                    variant="ghost"
+                    className="cursor-pointer absolute left-0 top-[150px] -translate-y-1/2 p-2 border border-[#ffae9d]"
+                    aria-label="Previous products"
+                >
+                    <ChevronLeft className="h-8 w-8 text-[#392e2c]" />
+                </Button>
+
+                <Button
+                    variant="ghost"
+                    className="cursor-pointer absolute right-0 top-[150px] -translate-y-1/2 p-2 border border-[#ffae9d]"
+                    aria-label="Next products"
+                >
+                    <ChevronRight className="h-8 w-8 text-[#392e2c]" />
+                </Button>
             </Carousel>
 
             <main>{children}</main>
