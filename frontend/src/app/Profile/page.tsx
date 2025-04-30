@@ -42,13 +42,13 @@ export default function ProfilePage() {
     return (
         <div className="bg-[#faf2ea] flex flex-row justify-center w-full">
             <div className="bg-[#faf2ea] overflow-hidden w-[1440px] relative">
-                <section className="mt-16 flex flex-col tems-center">
+                <section className="mt-16 flex flex-col items-center">
                     <h2 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl text-center tracking-[0] leading-normal mb-12">
                         CONNEXION
                     </h2>
 
                     <div className="w-[449px]">
-                        <div className="mb-6">
+                        <div className="mb-6 ">
                             <label className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base mb-2 block">
                                 Email
                             </label>
@@ -90,13 +90,13 @@ export default function ProfilePage() {
                     <Separator className="w-[500px] my-10" />
 
                     <div className="flex items-center gap-2 mb-16">
-                        <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xl">
+                        <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm">
                             Nouveau ?
                         </span>
                         <Button
                             onClick={() => router.push("/CreateAccount")}
                             variant="outline"
-                            className="cursor-pointer h-[38px] rounded-[10px] border-2 border-solid border-[#ccaea4] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-base"
+                            className="cursor-pointer h-[38px] rounded-[10px] border-2 border-solid border-[#ccaea4] [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm"
                         >
                             Creer un compte
                         </Button>

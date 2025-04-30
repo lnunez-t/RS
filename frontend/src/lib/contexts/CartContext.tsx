@@ -17,6 +17,7 @@ type CartContextType = {
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
+  updateCartItemQuantity: (id: string, quantity: number) => void;
   isCartOpen: boolean;
 };
 
@@ -47,6 +48,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
 
+  const updateCartItemQuantity = (id: string, quantity: number) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity } : item
+      )
+    );
+  };
+
+
   return (
     <CartContext.Provider
       value={{
@@ -56,6 +66,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         openCart,
         closeCart,
+        updateCartItemQuantity,
         isCartOpen,
       }}
     >

@@ -9,7 +9,7 @@ import {
     Minus,
     Plus,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useProduct } from "@/lib/contexts/ProductContext";
 import { useCartContext } from "@/lib/contexts/CartContext";
@@ -45,6 +45,22 @@ export default function ProductPage() {
     const { selectProduct, selectedProduct } = useProduct();
     const { addToCart } = useCartContext();
     const router = useRouter();
+    const [quantity, setQuantity] = useState<number>(1);
+
+    const increaseQuantity = () => {
+        setQuantity((prev) => prev + 1);
+    };
+    
+    const decreaseQuantity = () => {
+        setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+    };
+
+    useEffect(() => {
+        if (selectedProduct) {
+            selectProduct({ ...selectedProduct, quantity });
+        }
+    }, [quantity]);
+    
 
     const handleAddToCart = () => {
         if (selectedProduct) {
@@ -52,7 +68,7 @@ export default function ProductPage() {
                 id: selectedProduct.id,
                 name: selectedProduct.name,
                 price: selectedProduct.price,
-                quantity: selectedProduct.quantity,
+                quantity: quantity,
                 image: selectedProduct.image,
             });
             alert("Produit ajouté au panier");
@@ -71,6 +87,7 @@ export default function ProductPage() {
             <main className="max-w-7xl mx-auto px-4 py-6">
                 <div className="flex items-center mb-8">
                     <Button
+                        onClick={() => router.back()}
                         variant="outline"
                         size="sm"
                         className="cursor-pointer flex items-center gap-2 rounded-[5px] border-2 border-[#392e2c] h-7 w-7 p-0"
@@ -96,20 +113,15 @@ export default function ProductPage() {
                     </div>
 
                     <div className="md:w-1/2">
-                        <h1 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl text-center mb-2">
+                        <h1 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl mb-2">
                             {selectedProduct.name}
                         </h1>
-                        <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-xl text-center mb-4">
+                        <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-xl mb-4">
                             {selectedProduct.price}
                         </p>
 
-                        <div className="text-center mb-6">
-                            <Button
-                                variant="link"
-                                className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs underline"
-                            >
-                                Description du produit
-                            </Button>
+                        <div className="text-center mb-6 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs underline">
+                            Description du produit
                         </div>
 
                         <div className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-[10px] text-justify mb-8">
@@ -117,12 +129,12 @@ export default function ProductPage() {
                         </div>
 
                         <div className="mb-6">
-                            <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs mb-2">
+                            <p className=" [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs mb-2">
                                 Choisis ta taille :
                             </p>
                             <Button
                                 variant="outline"
-                                className="h-[25px] rounded-[20px] border border-[#ffae9d] bg-[#faf2ea] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[10px]"
+                                className="cursor-pointer h-[25px] rounded-[20px] border border-[#ffae9d] bg-[#faf2ea] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[10px]"
                             >
                                 Taille unique
                             </Button>
@@ -133,14 +145,14 @@ export default function ProductPage() {
                                 Quantite
                             </p>
                             <div className="flex items-center w-[55px] h-[22px] rounded-[20px] border border-[#ffae9d]">
-                                <Button variant="ghost" className="h-4 w-4 p-0">
-                                    <Minus className="h-2 w-2" />
+                                <Button variant="ghost" className="cursor-pointer h-4 w-4 p-0" onClick={decreaseQuantity}>
+                                    <Minus className=" h-2 w-2" />
                                 </Button>
                                 <span className="flex-1 text-center [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs">
-                                    1
+                                    {quantity}
                                 </span>
-                                <Button variant="ghost" className="h-4 w-4 p-0">
-                                    <Plus className="h-2 w-2" />
+                                <Button variant="ghost" className="cursor-pointer h-4 w-4 p-0" onClick={increaseQuantity}>
+                                    <Plus className=" h-2 w-2" />
                                 </Button>
                             </div>
                         </div>
@@ -171,7 +183,7 @@ export default function ProductPage() {
                                 >
                                     <Card
                                         key={product.id}
-                                        className="w-[200px] bg-transparent border-none"
+                                        className="w-[200px] bg-transparent shadow-none border-none"
                                     >
                                         <CardContent className="p-0">
                                             <img
