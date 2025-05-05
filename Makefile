@@ -44,3 +44,6 @@ frontend:
 # Lancer uniquement le backend sans Docker
 backend:
 	cd $(BACKEND_DIR) && npm install && npm start
+
+# Rebuild total (clean + up)
+re: clean up

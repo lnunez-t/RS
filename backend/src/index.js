@@ -10,9 +10,13 @@ const swaggerSpec = require('./swagger/swagger.js');
 const cors = require('cors');
 const app = express();
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 // Autoriser les requêtes depuis localhost:3000
 app.use(cors({
     origin: 'http://localhost:3000', // autoriser cette origine
+    credentials: true,
     methods: ['GET', 'POST'], // autoriser certaines méthodes
     allowedHeaders: ['Content-Type'], // autoriser certains headers
 }));
