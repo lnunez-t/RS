@@ -67,9 +67,13 @@ export default function ProfilePage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="h-[42px] rounded-[20px] border border-solid border-[#ffae9d]" />
-                            <div className="mt-1 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-[11px]">
-                                Mot de passe oublie ?
+                            <div
+                            onClick={() => router.push("/ForgotPassword")}
+                            className="cursor-pointer mt-1 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-[11px]"
+                            >
+                            Mot de passe oublie ?
                             </div>
+
                         </div>
 
                         {error && (

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -169,6 +169,7 @@ router.post('/forgot-password', async (req, res) => {
 
   router.post('/reset-password', async (req, res) => {
     const { email, token, newPassword } = req.body;
+   
     const user = await User.findOne({ email });
   
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
