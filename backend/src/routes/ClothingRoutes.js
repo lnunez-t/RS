@@ -18,7 +18,7 @@ router.post('/', auth, isAdmin, async (req, res) => {
 // ✅ Remplace les deux par une seule :
 router.get('/all_clothing', async (req, res) => {
   try {
-    const { size, color, inStock, page = 1, limit = 10, sort } = req.query;
+    const { size, color, inStock, page = 1, limit = 10, sort, search } = req.query;
     const filter = {};
 
     if (search) {

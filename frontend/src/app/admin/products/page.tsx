@@ -27,8 +27,8 @@ export default function ProductAdminPage() {
     const fetchProducts = async () => {
       const res = await fetch('http://localhost:4338/clothing/all_clothing');
       const data = await res.json();
-      console.log(data);
-      setProducts(data);
+      console.log(data.results);
+      setProducts(data.results);
     };
     fetchProducts();
   }, []);
@@ -46,7 +46,7 @@ export default function ProductAdminPage() {
 
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        onClick={() => router.push('/admin/products/new')}
+        onClick={() => router.push('/admin/addProduct')}
       >
         + Ajouter un produit
       </button>
