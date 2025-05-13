@@ -32,6 +32,9 @@ frontend-shell:
 mongo-shell:
 	$(DOCKER_COMPOSE) exec mongo mongosh
 
+init:
+	frontend && cd .. && backend && up
+
 # Nettoyer les conteneurs et les volumes
 clean:
 	$(DOCKER_COMPOSE) down -v
@@ -44,3 +47,6 @@ frontend:
 # Lancer uniquement le backend sans Docker
 backend:
 	cd $(BACKEND_DIR) && npm install && npm start
+
+# Rebuild total (clean + up)
+re: clean up

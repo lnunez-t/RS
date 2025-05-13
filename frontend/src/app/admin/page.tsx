@@ -1,9 +1,38 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await fetch('http://localhost:4338/useradmin/verify-token', {
+          method: 'GET',
+          credentials: 'include', // Indispensable si tu utilises les cookies HTTP-only
+        });
+
+        if (!res.ok) {
+          throw new Error('Invalid token');
+        }
+
+        // Token valide → continuer
+        console.log("test");
+        setLoading(false);
+      } catch (error) {
+        router.push('/admin/login');
+      }
+    };
+
+    verifyToken();
+  }, [router]);
+
+  if (loading) {
+    return <div className="text-center mt-10">Chargement...</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6">

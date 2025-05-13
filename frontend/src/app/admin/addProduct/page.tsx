@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+
 
 export default function AddProductPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -13,6 +16,29 @@ export default function AddProductPage() {
     color: '',
     stock: '',
   });
+
+    useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await fetch('http://localhost:4338/useradmin/verify-token', {
+          method: 'GET',
+          credentials: 'include', // Indispensable si tu utilises les cookies HTTP-only
+        });
+
+        if (!res.ok) {
+          throw new Error('Invalid token');
+        }
+
+        // Token valide → continuer
+        console.log("test");
+        setLoading(false);
+      } catch (error) {
+        router.push('/admin/login');
+      }
+    };
+
+    verifyToken();
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -40,6 +66,7 @@ export default function AddProductPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newProduct),
+      credentials: 'include',
     });
 
     if (res.ok) {

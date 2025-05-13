@@ -22,10 +22,11 @@ export default function ProfilePage() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
                 body: JSON.stringify({email, password}),
             });
               
-            
+        
             if (response.status === 200) {
                 localStorage.setItem("IsLoggedIn", "true");
                 router.push("/Dashboard");

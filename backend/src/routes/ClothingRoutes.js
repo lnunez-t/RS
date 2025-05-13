@@ -3,9 +3,9 @@ const router = express.Router();
 const ClothingItem = require('../models/ClothingItem');
 const auth = require('../middleware/authMiddleware');
 const isAdmin = require('../middleware/isAdmin');
-
+const verifyToken = require('./AdminRoute');
 // ✅ Ajouter un vêtement (admin only)
-router.post('/', auth, isAdmin, async (req, res) => {
+router.post('/', verifyToken, isAdmin, async (req, res) => {
   try {
     const item = new ClothingItem(req.body);
     await item.save();

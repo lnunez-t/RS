@@ -1,6 +1,7 @@
 const express = require('express');
 const UserAdmin = require('../models/UserAdmin');
 const jwt = require('jsonwebtoken');
+module.exports = verifyToken;
 
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
@@ -33,7 +34,17 @@ router.post('/login', async (req, res) => {
 
     // Generate a JWT token
     const token = jwt.sign({ id: admin._id, role: admin.role }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login successful', token });
+    res
+    .cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000, // 1h
+      })
+
+    .status(200)
+    .json({ message: 'Login successful' });
+    console.log(admin.role)
   } catch (error) {
     res.status(500).json({ error: 'Failed to authenticate admin', details: error.message });
   }
@@ -51,6 +62,30 @@ router.delete('/remove/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to remove admin', details: error.message });
   }
+});
+
+function verifyToken(req, res, next) {
+  const token = req.cookies.token; // 🔥 récupéré depuis le cookie
+
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ error: 'Invalid token' });
+  }
+}
+
+// Route de vérification
+router.get('/verify-token', verifyToken, (req, res) => {
+  res.status(200).json({
+    message: 'Token is valid',
+    user: req.user, // contient l’id et le rôle de l’admin
+  });
 });
 
 module.exports = router;
