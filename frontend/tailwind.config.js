@@ -1,7 +1,7 @@
 modules.export = {
     content: [
         "./src/**/*.{html,js,ts,jsx,tsx}",
-        "app/**/*.{ts,tsx}",
+        "app/**/*.{ts,tsx, js, jsx}",
     ],
     theme: {
         extend: {
@@ -46,15 +46,8 @@ modules.export = {
                 sm: "calc(var(--radius) - 4px)",
             },
             fontFamily: {
-                sans: [
-                    "ui-sans-serif",
-                    "system-ui",
-                    "sans-serif",
-                    '"Apple Color Emoji"',
-                    '"Segoe UI Emoji"',
-                    '"Segoe UI Symbol"',
-                    '"Noto Color Emoji"',
-                    ],
+                playfair: ['"Playfair Display"', 'serif'],
+                sans: ['"Playfair Display"', 'serif'],
             },
             keyframes: {
                 "accordion-down": {

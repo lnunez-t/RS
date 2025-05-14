@@ -110,7 +110,6 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
 
           {/* RIGHT on mobile: icons */}
           <div className="md:hidden flex items-center space-x-4">
-            <MagnifyingGlassIcon className="w-5 h-5 text-gray-700" />
             <button onClick={openCart} aria-label="panier">
               <ShoppingCartIcon className="w-5 h-5 text-[#392e2c]" />
             </button>
@@ -144,6 +143,15 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
             >
               BOUTIQUE
             </Link>
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Recherche..."
+                className="w-full pl-4 pr-10 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ccaea4] text-sm"
+              />
+              <MagnifyingGlassIcon className="absolute top-1/2 right-3 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
+            </div>
+
           </div>
         )}
       </nav>

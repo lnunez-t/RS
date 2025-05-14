@@ -1,8 +1,7 @@
 "use client";
 
 import { Package } from "lucide-react";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -17,62 +16,61 @@ export default function DashboardPage() {
         if (isLoggedIn !== "true") {
             router.push("/Profile");
         } else {
-            setIsChecking(false);  // Fin de la vérification, l'utilisateur est connecté
+            setIsChecking(false);
         }
     }, [router]);
 
     if (isChecking) {
-        // Pendant la vérification, tu peux afficher un petit loader ou rien du tout
-        return <div className="h-screen flex items-center justify-center">Chargement...</div>;
+        return (
+            <div className="h-screen flex items-center justify-center">
+                Chargement...
+            </div>
+        );
     }
 
     return (
-        <div className="bg-[#faf2ea] flex flex-row justify-center w-full">
-            <div className="bg-[#faf2ea] overflow-hidden w-[1440px] relative">
-                <div className="w-full h-[59px] bg-[#ccaea4]">
-                    <div className="flex justify-center items-center h-full">
-                        {profileNavItems.map((item, index) => (
-                            <div key={index} 
-                                className="relative mx-10 cursor-pointer hover:border-b-2 hover:border-[#ffae9d] pb-1 "
-                                onClick={() => {
-                                    if (item === "Deconnexion") {
-                                        localStorage.setItem("IsLoggedIn", "false");
-                                        router.push("/Profile");
-                                    }
-                                }}>
-                                <div className={`[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base text-center`}>
-                                    {item}
-                                </div>
-                                
-                            </div>
-                        ))}
+        <div className="bg-[#faf2ea] w-full min-h-screen flex flex-col items-center px-4">
+            {/* Navigation */}
+            <div className="w-full bg-[#ccaea4] py-4">
+                <div className="flex flex-wrap justify-center items-center gap-4">
+                    {profileNavItems.map((item, index) => (
+                        <div
+                            key={index}
+                            className="cursor-pointer hover:border-b-2 hover:border-[#ffae9d] pb-1 text-white text-base font-bold"
+                            onClick={() => {
+                                if (item === "Deconnexion") {
+                                    localStorage.setItem("IsLoggedIn", "false");
+                                    router.push("/Profile");
+                                }
+                            }}
+                        >
+                            {item}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Contenu principal */}
+            <main className="flex flex-col items-center justify-center w-full max-w-[600px] text-center py-10">
+                <div className="relative mb-10">
+                    <Package className="w-20 h-20 mx-auto text-[#392e2c]" />
+                    <div className="absolute w-6 h-6 top-0 right-0 bg-[#392e2c] rounded-full border flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">0</span>
                     </div>
                 </div>
-                
-                <main className="flex flex-col items-center justify-center mt-20">
-                    <div className="relative mb-16">
-                        <Package className="w-[87px] h-[87px]" />
-                        <div className="absolute w-6 h-6 top-2.5 right-0 bg-[#392e2c] rounded-xl border border-solid flex items-center justify-center">
-                            <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base">
-                                0
-                            </span>
-                        </div>
-                    </div>
 
-                    <div className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xl text-center mb-16">
-                        Vous n&apos;avez effectue aucune commande.
-                    </div>
+                <h1 className="text-[#392e2c] text-lg sm:text-xl font-bold mb-10">
+                    Vous n&apos;avez effectué aucune commande.
+                </h1>
 
-                    <Button 
-                        onClick={() => router.push("/Shop")}
-                        className="cursor-pointer bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[37px] px-6">
-                        <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-white text-base">
-                            Explorer nos produits
-                        </span>
-                    </Button>
-                </main>
-
-            </div>
+                <Button
+                    onClick={() => router.push("/Shop")}
+                    className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[42px] px-6 text-white font-bold text-base"
+                >
+                    Explorer nos produits
+                </Button>
+            </main>
         </div>
     );
 }
+

@@ -9,10 +9,17 @@ import {
     Minus,
     Plus,
 } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useProduct } from "@/lib/contexts/ProductContext";
 import { useCartContext } from "@/lib/contexts/CartContext";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const relatedProducts = [
     {
@@ -47,20 +54,14 @@ export default function ProductPage() {
     const router = useRouter();
     const [quantity, setQuantity] = useState<number>(1);
 
-    const increaseQuantity = () => {
-        setQuantity((prev) => prev + 1);
-    };
-    
-    const decreaseQuantity = () => {
-        setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-    };
+    const increaseQuantity = () => setQuantity(prev => prev + 1);
+    const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
     useEffect(() => {
         if (selectedProduct) {
             selectProduct({ ...selectedProduct, quantity });
         }
     }, [quantity]);
-    
 
     const handleAddToCart = () => {
         if (selectedProduct) {
@@ -68,16 +69,16 @@ export default function ProductPage() {
                 id: selectedProduct.id,
                 name: selectedProduct.name,
                 price: selectedProduct.price,
-                quantity: quantity,
+                quantity,
                 image: selectedProduct.image,
             });
             alert("Produit ajouté au panier");
         }
     };
-     
+
     const handleProductClick = (product: any) => {
-        selectProduct(product);  // Met à jour le produit sélectionné dans le contexte
-        router.push("/Product");  // Navigue vers la page du produit
+        selectProduct(product);
+        router.push("/Product");
     };
 
     if (!selectedProduct) return <div>Produit non trouvé</div>;
@@ -85,82 +86,80 @@ export default function ProductPage() {
     return (
         <div className="bg-[#faf2ea] min-h-screen">
             <main className="max-w-7xl mx-auto px-4 py-6">
+                {/* RETOUR */}
                 <div className="flex items-center mb-8">
                     <Button
                         onClick={() => router.back()}
                         variant="outline"
                         size="sm"
-                        className="cursor-pointer flex items-center gap-2 rounded-[5px] border-2 border-[#392e2c] h-7 w-7 p-0"
+                        className="flex items-center gap-2 rounded-[5px] border-2 border-[#392e2c] h-7 w-7 p-0"
                     >
                         <ArrowLeft className="h-5 w-5 text-[#392e2c]" />
                     </Button>
-                    <span className="ml-2 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-[11px]">
-                        Revenir en arriere
+                    <span className="ml-2 font-bold text-[#392e2c] text-xs">
+                        Revenir en arrière
                     </span>
                 </div>
 
+                {/* PRODUIT */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16">
-                    <div className="flex flex-col md:w-1/2">
-                        <div className="flex gap-4 mb-4">
-                            <div className="flex flex-col gap-4">
-                                <img
-                                    className="w-[350px] h-[350px] object-cover ml-12"
-                                    alt={selectedProduct.name}
-                                    src={selectedProduct.image}
-                                />
-                            </div>
-                        </div>
+                    {/* Image */}
+                    <div className="flex justify-center md:w-1/2">
+                        <img
+                            className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-cover"
+                            alt={selectedProduct.name}
+                            src={selectedProduct.image}
+                        />
                     </div>
 
+                    {/* Infos */}
                     <div className="md:w-1/2">
-                        <h1 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl mb-2">
+                        <h1 className="font-bold text-[#392e2c] text-2xl mb-2">
                             {selectedProduct.name}
                         </h1>
-                        <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#ffae9d] text-xl mb-4">
+                        <p className="font-bold text-[#ffae9d] text-xl mb-4">
                             {selectedProduct.price}
                         </p>
 
-                        <div className="text-center mb-6 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs underline">
+                        <div className="text-center mb-6 font-bold text-[#392e2c] text-xs underline">
                             Description du produit
                         </div>
 
-                        <div className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-[10px] text-justify mb-8">
+                        <div className="text-justify mb-8 text-sm text-[#392e2c]">
                             <p>{selectedProduct.description}</p>
                         </div>
 
+                        {/* Taille */}
                         <div className="mb-6">
-                            <p className=" [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs mb-2">
-                                Choisis ta taille :
-                            </p>
+                            <p className="font-bold text-[#392e2c] text-xs mb-2">Choisis ta taille :</p>
                             <Button
                                 variant="outline"
-                                className="cursor-pointer h-[25px] rounded-[20px] border border-[#ffae9d] bg-[#faf2ea] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-[#392e2c] text-[10px]"
+                                className="h-7 rounded-full border border-[#ffae9d] bg-[#faf2ea] font-semibold text-[#392e2c] text-xs px-4"
                             >
                                 Taille unique
                             </Button>
                         </div>
 
+                        {/* Quantité */}
                         <div className="mb-6">
-                            <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[392e2c] text-xs mb-2">
-                                Quantite
-                            </p>
-                            <div className="flex items-center w-[55px] h-[22px] rounded-[20px] border border-[#ffae9d]">
-                                <Button variant="ghost" className="cursor-pointer h-4 w-4 p-0" onClick={decreaseQuantity}>
-                                    <Minus className=" h-2 w-2" />
+                            <p className="font-bold text-[#392e2c] text-xs mb-2">Quantité</p>
+                            <div className="flex items-center w-[70px] h-[30px] rounded-full border border-[#ffae9d]">
+                                <Button variant="ghost" className="h-6 w-6 p-0" onClick={decreaseQuantity}>
+                                    <Minus className="h-4 w-4" />
                                 </Button>
-                                <span className="flex-1 text-center [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xs">
+                                <span className="flex-1 text-center font-bold text-[#392e2c] text-sm">
                                     {quantity}
                                 </span>
-                                <Button variant="ghost" className="cursor-pointer h-4 w-4 p-0" onClick={increaseQuantity}>
-                                    <Plus className=" h-2 w-2" />
+                                <Button variant="ghost" className="h-6 w-6 p-0" onClick={increaseQuantity}>
+                                    <Plus className="h-4 w-4" />
                                 </Button>
                             </div>
                         </div>
 
                         <div className="flex justify-center mt-8">
-                            <Button 
+                            <Button
                                 onClick={handleAddToCart}
-                                className="cursor-pointer w-[99px] h-[25px] rounded-[20px] bg-[#ffae9d] border border-[#ccaea4] shadow-[0px_0px_4px_2px_#b39188] [font-family:'Playfair_Display-SemiBold', Helvetica] font-semibold text-white text-[10px]"
+                                className="w-[140px] h-[35px] rounded-full bg-[#ffae9d] border border-[#ccaea4] shadow-md font-semibold text-white text-sm"
                             >
                                 Ajouter au panier
                             </Button>
@@ -168,59 +167,53 @@ export default function ProductPage() {
                     </div>
                 </div>
 
+                {/* PRODUITS SIMILAIRES */}
                 <div className="mb-16">
-                    <h2 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-xl text-center mb-8">
-                        Vous aimerez peut-etre ...
+                    <h2 className="font-bold text-[#392e2c] text-xl text-center mb-8">
+                        Vous aimerez peut-être ...
                     </h2>
 
-                    <div className="relative">
-                        <div className="flex justify-center gap-4">
-                            {relatedProducts.map((product) => (
-                                <div
+                    <Carousel className="relative">
+                        <CarouselContent className="flex justify-center gap-x-2">
+                        {relatedProducts.map((product) => (
+                            
+                            <CarouselItem
                                 key={product.id}
-                                onClick={() => handleProductClick(product)}
-                                className="cursor-pointer w-full"
-                                >
-                                    <Card
-                                        key={product.id}
-                                        className="w-[200px] bg-transparent shadow-none border-none"
-                                    >
-                                        <CardContent className="p-0">
-                                            <img
-                                                className="w-[200px] h-[200px] object-cover"
-                                                alt={product.name}
-                                                src={product.image}
-                                            />
-                                        </CardContent>
-                                        <CardFooter className="flex flex-col items-center p-0 pt-2">
-                                            <h3 className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm text-center">
-                                                {product.name}
-                                            </h3>
-                                            <p className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-sm">
-                                                {product.price}
-                                            </p>
-                                        </CardFooter>
-                                    </Card>
-                                </div>
-                            ))}
-                        </div>
+                                className="pl-2 basis-full sm:basis-1/2 md:basis-1/3 flex justify-center"
+                            >
+                                <Card className="border-none shadow-none bg-transparent">
+                                <CardContent className="p-0 flex flex-col items-center">
+                                    <div className="w-full max-w-[220px] h-[220px] sm:h-[246px] mb-4">
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        className="w-full h-full object-cover rounded-md shadow"
+                                        onClick={() => handleProductClick(product)}
+                                    />
+                                    </div>
+                                    <h3 className="text-sm font-bold text-center text-[#392e2c] font-playfair">
+                                        {product.name}
+                                    </h3>
+                                    <p className="font-bold text-[#392e2c] text-sm">
+                                    {product.price}
+                                    </p>
+                                </CardContent>
+                                </Card>
+                                
+                            </CarouselItem>
+                            
+                        ))}
+                        </CarouselContent>
 
-                        <Button
-                            variant="ghost"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 p-2"
-                            aria-label="Previous products"
-                        >
-                            <ChevronLeft className="h-8 w-8 text-[#392e2c]" />
-                        </Button>
+                        {/* Flèches gauche / droite */}
+                        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
+                        <ChevronLeft className="w-6 h-6 text-[#392e2c]" />
+                        </CarouselPrevious>
 
-                        <Button
-                            variant="ghost"
-                            className="absolute right-0 top-1/2 -translate-y-1/2 p-2"
-                            aria-label="Next products"
-                        >
-                            <ChevronRight className="h-8 w-8 text-[#392e2c]" />
-                        </Button>
-                    </div>
+                        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
+                        <ChevronRight className="w-6 h-6 text-[#392e2c]" />
+                        </CarouselNext>
+                    </Carousel>
                 </div>
             </main>
         </div>
