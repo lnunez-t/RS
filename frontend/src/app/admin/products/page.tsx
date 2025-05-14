@@ -20,9 +20,30 @@ type Product = {
 
 export default function ProductAdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await fetch('http://localhost:4338/useradmin/verify-token', {
+          method: 'GET',
+          credentials: 'include', // Indispensable si tu utilises les cookies HTTP-only
+        });
+
+        if (!res.ok) {
+          throw new Error('Invalid token');
+        }
+
+        // Token valide → continuer
+        console.log("test");
+        setLoading(false);
+      } catch (error) {
+        router.push('/admin/login');
+      }
+    };
+
+    verifyToken();
     // Charger les produits existants
     const fetchProducts = async () => {
       const res = await fetch('http://localhost:4338/clothing/all_clothing');

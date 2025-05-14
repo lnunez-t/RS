@@ -7,6 +7,4 @@ Laura
 
 Max
 
-- reinitialisation mdp foncitonne pas (user inconnu)
-- token delete mais au rechargement de page pas de redir vers login page sauf si on est sur page admin
 - aussi l ajout d un clothing

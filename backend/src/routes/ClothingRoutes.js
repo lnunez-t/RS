@@ -4,10 +4,25 @@ const ClothingItem = require('../models/ClothingItem');
 const auth = require('../middleware/authMiddleware');
 const isAdmin = require('../middleware/isAdmin');
 const verifyToken = require('./AdminRoute');
+const multer = require('multer');
+const { storage } = require('../config/cloudinary');
+const upload = multer({ storage });
 // ✅ Ajouter un vêtement (admin only)
-router.post('/', verifyToken, isAdmin, async (req, res) => {
+
+router.post('/', verifyToken, isAdmin, upload.array('images', 5), async (req, res) => {
   try {
-    const item = new ClothingItem(req.body);
+    const imageUrls = req.files.map(file => file.path); // URL Cloudinary
+
+    const variants = JSON.parse(req.body.variants);
+
+    const item = new ClothingItem({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      variants,
+      images: imageUrls
+    });
+
     await item.save();
     res.status(201).json(item);
   } catch (err) {
