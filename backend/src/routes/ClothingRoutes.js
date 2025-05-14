@@ -9,24 +9,25 @@ const { storage } = require('../config/cloudinary');
 const upload = multer({ storage });
 // ✅ Ajouter un vêtement (admin only)
 
-router.post('/', verifyToken, isAdmin, upload.array('images', 5), async (req, res) => {
+router.post('/', verifyToken, upload.array('images', 5), async (req, res) => {
   try {
-    const imageUrls = req.files.map(file => file.path); // URL Cloudinary
-
+    const imageUrls = req.files.map(file => file.path);
     const variants = JSON.parse(req.body.variants);
+    const price = parseFloat(req.body.price);
 
     const item = new ClothingItem({
       name: req.body.name,
       description: req.body.description,
-      price: req.body.price,
+      price,
       variants,
-      images: imageUrls
+      images: imageUrls,
     });
 
     await item.save();
     res.status(201).json(item);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('🛑 Erreur route POST /clothing :', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
+    res.status(500).json({ error: err.message || 'Erreur inconnue' });
   }
 });
 

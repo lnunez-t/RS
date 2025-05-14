@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'clothing_items', // le dossier sur Cloudinary
-    allowed_formats: ['jpg', 'png', 'jpeg'],
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
   },
 });
 
