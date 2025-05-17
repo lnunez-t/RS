@@ -72,7 +72,6 @@ export default function ProductPage() {
                 quantity,
                 image: selectedProduct.image,
             });
-            alert("Produit ajouté au panier");
         }
     };
 
@@ -173,17 +172,22 @@ export default function ProductPage() {
                         Vous aimerez peut-être ...
                     </h2>
 
-                    <Carousel className="relative">
-                        <CarouselContent className="flex justify-center gap-x-2">
+                    <Carousel 
+                        opts={{
+                            align: "start",
+                            slidesToScroll: 2, // Défiler 2 par 2
+                          }}
+                        className="w-full max-w-screen-md mx-auto">
+                        <CarouselContent className="-ml-2 flex">
                         {relatedProducts.map((product) => (
                             
                             <CarouselItem
                                 key={product.id}
-                                className="pl-2 basis-full sm:basis-1/2 md:basis-1/3 flex justify-center"
+                                className="pl-2 basis-1/2 sm:basis-1/2 md:basis-1/3 flex justify-center"
                             >
                                 <Card className="border-none shadow-none bg-transparent">
                                 <CardContent className="p-0 flex flex-col items-center">
-                                    <div className="w-full max-w-[220px] h-[220px] sm:h-[246px] mb-4">
+                                    <div className="w-[180px] max-w-[220px] h-[220px] sm:h-[246px] mb-4">
                                     <img
                                         src={product.image}
                                         alt={product.name}

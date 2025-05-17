@@ -18,7 +18,7 @@ import {
 const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { isCartOpen, openCart, closeCart } = useCart();
+  const { cartItems, isCartOpen, openCart, closeCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -112,7 +112,13 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
           <div className="md:hidden flex items-center space-x-4">
             <button onClick={openCart} aria-label="panier">
               <ShoppingCartIcon className="w-5 h-5 text-[#392e2c]" />
+              { cartItems.length > 0 && (
+              <span className="relative -top-3 -right-3 bg-[#000] text-white text-xs font-bold rounded-full h-4 w-4 flex justify-center shadow">
+                {cartItems.length}
+              </span>
+            )}
             </button>
+            
             <button onClick={handleProfileClick} aria-label="profil">
               <UserIcon className="w-5 h-5 text-black" />
             </button>
