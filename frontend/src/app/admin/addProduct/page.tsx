@@ -6,14 +6,19 @@ import { useRouter } from 'next/navigation';
 export default function AddProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+
+  const allSizes = ['TU' ,'XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
-    size: '',
-    color: '',
-    stock: '',
   });
+
+  const [variants, setVariants] = useState([
+    { size: '', color: '', stock: '' }
+  ]);
 
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -27,7 +32,6 @@ export default function AddProductPage() {
         });
 
         if (!res.ok) throw new Error('Invalid token');
-
         setLoading(false);
       } catch (error) {
         router.push('/admin/login');
@@ -40,6 +44,19 @@ export default function AddProductPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleVariantChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setVariants(prev => {
+      const updated = [...prev];
+      updated[index][name as keyof typeof updated[number]] = value;
+      return updated;
+    });
+  };
+
+  const addVariant = () => {
+    setVariants(prev => [...prev, { size: '', color: '', stock: '' }]);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,14 +76,16 @@ export default function AddProductPage() {
     form.append('price', formData.price);
     form.append('description', formData.description);
 
-    const variants = [
-      {
-        size: formData.size,
-        color: formData.color,
-        stock: parseInt(formData.stock),
-      },
-    ];
-    form.append('variants', JSON.stringify(variants));
+    form.append(
+      'variants',
+      JSON.stringify(
+        variants.map(v => ({
+          size: v.size,
+          color: v.color,
+          stock: parseInt(v.stock),
+        }))
+      )
+    );
 
     images.forEach(image => {
       form.append('images', image);
@@ -95,7 +114,7 @@ export default function AddProductPage() {
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gray-100 px-4 py-10 gap-10">
-      {/* Preview des images */}
+      {/* Prévisualisation des images */}
       <div className="flex flex-col gap-4">
         {imagePreviews.map((src, index) => (
           <img
@@ -138,32 +157,54 @@ export default function AddProductPage() {
           className="w-full border rounded px-4 py-2"
         />
 
-        <input
-          type="text"
-          name="size"
-          placeholder="Taille"
-          value={formData.size}
-          onChange={handleChange}
-          className="w-full border rounded px-4 py-2"
-        />
+        <div className="space-y-2">
+          <label className="font-semibold">Variantes :</label>
+          {variants.map((variant, index) => (
+            <div key={index} className="grid grid-cols-3 gap-2">
+              <select
+                name="size"
+                value={variant.size}
+                onChange={(e) => handleVariantChange(index, e)}
+                className="border rounded px-2 py-1"
+                required
+              >
+                <option value="">Taille</option>
+                {allSizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
 
-        <input
-          type="text"
-          name="color"
-          placeholder="Couleur"
-          value={formData.color}
-          onChange={handleChange}
-          className="w-full border rounded px-4 py-2"
-        />
+              <input
+                type="text"
+                name="color"
+                placeholder="Couleur"
+                value={variant.color}
+                onChange={(e) => handleVariantChange(index, e)}
+                className="border rounded px-2 py-1"
+                required
+              />
+              <input
+                type="number"
+                name="stock"
+                placeholder="Stock"
+                value={variant.stock}
+                onChange={(e) => handleVariantChange(index, e)}
+                className="border rounded px-2 py-1"
+                required
+              />
+            </div>
+          ))}
 
-        <input
-          type="number"
-          name="stock"
-          placeholder="Stock"
-          value={formData.stock}
-          onChange={handleChange}
-          className="w-full border rounded px-4 py-2"
-        />
+          <button
+            type="button"
+            onClick={addVariant}
+            className="text-blue-600 hover:underline text-sm mt-2"
+          >
+            ➕ Ajouter une variante
+          </button>
+        </div>
 
         <input
           type="file"
