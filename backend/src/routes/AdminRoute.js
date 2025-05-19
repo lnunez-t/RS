@@ -1,7 +1,8 @@
 const express = require('express');
 const UserAdmin = require('../models/UserAdmin');
 const jwt = require('jsonwebtoken');
-
+const verifyToken = require('../middleware/verifyToken')
+const isAdmin = require('../middleware/isAdmin')
 
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
@@ -64,33 +65,15 @@ router.delete('/remove/:id', async (req, res) => {
   }
 });
 
-function verifyToken(req, res, next) {
-  const token = req.cookies.token;
 
-  if (!token) {
-    return res.status(401).json({ error: 'Aucun token fourni' });
-  }
 
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    if (decoded.role !== 'admin') {
-      return res.status(403).json({ error: 'Accès interdit : rôle admin requis' });
-    }
-
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(403).json({ error: 'Token invalide' });
-  }
-}
 
 // Route de vérification
-router.get('/verify-token', verifyToken ,(req, res) => {
+router.get('/verify-token', verifyToken,isAdmin, isAdmin ,(req, res) => {
   res.status(200).json({
     message: 'Token is valid',
     user: req.user, // contient l’id et le rôle de l’admin
   });
 });
-module.exports = verifyToken;
+
 module.exports = router;

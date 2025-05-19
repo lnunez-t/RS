@@ -55,11 +55,32 @@ export default function ProductAdminPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (confirm('Supprimer ce produit ?')) {
-      await fetch(`http://localhost:4338/clothing/${id}`, { method: 'DELETE' });
+  if (confirm('Supprimer ce produit ?')) {
+    try {
+      const res = await fetch(`http://localhost:4338/clothing/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      const contentType = res.headers.get('content-type');
+      const isJson = contentType?.includes('application/json');
+
+      if (!res.ok) {
+        const error = isJson ? await res.json() : { error: 'Erreur inconnue' };
+        alert(error.error || 'Erreur');
+        return;
+      }
+
+      alert('Produit supprimé avec succès');
       setProducts(products.filter(p => p._id !== id));
+    } catch (err) {
+      console.error('Erreur de suppression:', err);
+      alert('Erreur réseau');
     }
-  };
+  }
+};
+
+
 
   return (
     <div className="p-6 space-y-6">

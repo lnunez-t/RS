@@ -20,6 +20,9 @@ restart: down up
 logs:
 	$(DOCKER_COMPOSE) logs -f
 
+logs-back:
+	$(DOCKER_COMPOSE) logs -f backend
+
 # Accéder au shell du conteneur backend
 backend-shell:
 	$(DOCKER_COMPOSE) exec backend sh

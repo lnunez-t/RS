@@ -3,13 +3,13 @@ const router = express.Router();
 const ClothingItem = require('../models/ClothingItem');
 const auth = require('../middleware/authMiddleware');
 const isAdmin = require('../middleware/isAdmin');
-const verifyToken = require('./AdminRoute');
+const verifyToken = require('../middleware/verifyToken');
 const multer = require('multer');
 const { storage } = require('../config/cloudinary');
 const upload = multer({ storage });
 // ✅ Ajouter un vêtement (admin only)
 
-router.post('/', verifyToken, upload.array('images', 5), async (req, res) => {
+router.post('/', verifyToken,isAdmin, upload.array('images', 5), async (req, res) => {
   try {
     const imageUrls = req.files.map(file => file.path);
     const variants = JSON.parse(req.body.variants);
@@ -77,7 +77,7 @@ router.get('/all_clothing', async (req, res) => {
 
 
 
-router.put('/:id', auth, isAdmin, async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -97,7 +97,7 @@ router.put('/:id', auth, isAdmin, async (req, res) => {
   }
 });
 
-router.delete('/:id', auth, isAdmin, async (req, res) => {
+router.delete('/:id', verifyToken,isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const deletedItem = await ClothingItem.findByIdAndDelete(id);
