@@ -46,7 +46,10 @@ export default function AddProductPage() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleVariantChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVariantChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setVariants(prev => {
       const updated = [...prev];
@@ -54,6 +57,7 @@ export default function AddProductPage() {
       return updated;
     });
   };
+
 
   const addVariant = () => {
     setVariants(prev => [...prev, { size: '', color: '', stock: '' }]);
@@ -164,7 +168,9 @@ export default function AddProductPage() {
               <select
                 name="size"
                 value={variant.size}
-                onChange={(e) => handleVariantChange(index, e)}
+                onChange={(e) =>
+                  handleVariantChange(index, e as React.ChangeEvent<HTMLSelectElement>)
+                }
                 className="border rounded px-2 py-1"
                 required
               >
@@ -175,6 +181,7 @@ export default function AddProductPage() {
                   </option>
                 ))}
               </select>
+
 
               <input
                 type="text"

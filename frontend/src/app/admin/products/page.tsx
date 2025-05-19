@@ -95,7 +95,18 @@ export default function ProductAdminPage() {
 
       <div className="grid gap-4">
         {products.map((product) => (
-          <div key={product._id} className="border p-4 rounded shadow">
+        <div key={product._id} className="border p-4 rounded shadow flex gap-4 items-start">
+          {/* Image du produit */}
+          {product.images[0] && (
+            <img
+              src={`${product.images[0]}`}
+              alt={product.name}
+              className="w-32 h-32 object-cover rounded border"
+            />
+          )}
+
+          {/* Infos produit */}
+          <div className="flex-1 space-y-1">
             <h2 className="text-lg font-semibold">{product.name}</h2>
             <p className="text-sm text-gray-700">{product.description}</p>
             <p className="font-medium">Prix : {product.price} €</p>
@@ -122,6 +133,8 @@ export default function ProductAdminPage() {
               </button>
             </div>
           </div>
+        </div>
+
         ))}
       </div>
     </div>
