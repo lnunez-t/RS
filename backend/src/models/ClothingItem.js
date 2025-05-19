@@ -12,6 +12,7 @@ const clothingItemSchema = new mongoose.Schema({
   variants: [variantSchema], // 👈 nouvelle structure
   price: { type: Number, required: true },
   images: [{ type: String }],
+  visible: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
