@@ -13,6 +13,7 @@ export default function DashboardPage() {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
+        
         const isLoggedIn = localStorage.getItem("IsLoggedIn");
         if (isLoggedIn !== "true") {
             router.push("/Profile");
