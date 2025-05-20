@@ -6,6 +6,29 @@ Laura
 
 Max
 
-- reinitialisation mdp fonctionne pas (user inconnu)
-- token delete mais au rechargement de page pas de redir vers login page sauf si on est sur page admin
-- aussi l ajout d un clothing
+- aussi l ajout d un clothing\
+
+
+
+
+
+
+voici la route router.post('/', auth, async (req, res) => {
+    try {
+      const { items, total, shippingAddress } = req.body;
+  
+      const newOrder = new Order({
+        user: req.user.id || req.user.userId,
+        items,
+        total,
+        shippingAddress
+      });
+  
+      await newOrder.save();
+      res.status(201).json({ message: 'Commande enregistrée', order: newOrder });
+    } catch (error) {
+      res.status(500).json({ error: 'Erreur lors de la commande', details: error.message });
+    }
+  }); avec l ID du projet 682c0a7246c9ae6fbd8a9494 et ID utilisateur 
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODBmOWI5Y2FjZWQzYWMwYjMzMGJhMWQiLCJpYXQiOjE3NDc3MTc0NzMsImV4cCI6MTc0NzcyMTA3M30.XPjnnGg__KNM48uA-OIBYk_SU_AfWz1ko29deaW3Sz0

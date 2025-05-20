@@ -17,6 +17,8 @@ const formFields = [
 
 export default function CreateAccount() {
     const router = useRouter();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,7 +50,7 @@ export default function CreateAccount() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email, password}),
+                body: JSON.stringify({email, password, infosPerso : {firstName, lastName}}),
             });
             if (response.status === 201) {
                 setError("Un email de vérification a été envoyé.");
@@ -85,18 +87,24 @@ export default function CreateAccount() {
                                     type={field.type}
                                     className="h-[42px] bg-white rounded-[10px] border border-solid border-[#ffae9d]"
                                     value={
-                                    field.id === "email"
+                                        field.id === "email"
                                         ? email
                                         : field.id === "password"
                                         ? password
                                         : field.id === "confirmPassword"
                                         ? confirmPassword
+                                        : field.id === "prenom"
+                                        ? firstName
+                                        : field.id === "nom"
+                                        ? lastName
                                         : undefined
                                     }
                                     onChange={(e) => {
                                         if (field.id === "email") setEmail(e.target.value);
                                         if (field.id === "password") setPassword(e.target.value);
                                         if (field.id === "confirmPassword") setConfirmPassword(e.target.value);
+                                        if (field.id === "prenom") setFirstName(e.target.value);
+                                        if (field.id === "nom") setLastName(e.target.value);
                                     }}
                                 />
                             </div>

@@ -55,7 +55,12 @@ export default function InfosClient() {
                 });
                 const data = await res.json();
                 console.log(data);
-                setUserData(data);
+                console.log(data.infosPerso.firstName);
+                setUserData({
+                    email: data.email,
+                    nom: data.infosPerso?.lastName || "",
+                    prenom: data.infosPerso?.firstName || ""
+                });
                 setLoading(false);
             } catch (err) {
                 console.error("Erreur lors de la récupération du profil :", err);

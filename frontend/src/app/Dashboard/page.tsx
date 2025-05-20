@@ -16,6 +16,7 @@ export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState("Mes commandes");
 
     useEffect(() => {
+        
         const isLoggedIn = localStorage.getItem("IsLoggedIn");
         if (isLoggedIn !== "true") {
             router.push("/Profile");

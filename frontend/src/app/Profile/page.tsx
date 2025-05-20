@@ -25,7 +25,7 @@ export default function ProfilePage() {
                 localStorage.setItem("IsLoggedIn", "true");
                 router.push("/Dashboard");
             } else {
-                setError("Email ou mot de passe incorrect.");
+                setError("passe incorrect.");
             }
         } catch (error) {
             setError("Une erreur est survenue. Veuillez réessayer.");

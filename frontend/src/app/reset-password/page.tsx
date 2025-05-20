@@ -28,12 +28,12 @@ const ResetPasswordPage = () => {
             setError("Les mots de passe ne correspondent pas.");
             return;
         }
-
+        const newPassword = password
         try {
             const res = await fetch("http://localhost:4338/api/auth/reset-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token, email, newPassword: password }),
+                body: JSON.stringify({ email, token, newPassword }),
             });
 
             if (res.ok) {

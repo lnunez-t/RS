@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const authenticate = require('../middleware/verifyToken');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
 router.post('/register', async (req, res) => {
-  const { email, password,firstName,lastName } = req.body;
+  const { email, password } = req.body;
 
   try {
     const existing = await User.findOne({ email });
@@ -20,8 +21,10 @@ router.post('/register', async (req, res) => {
     const user = new User({
       email,
       password,
-      firstName,
-      lastName,
+      infosPerso: {
+      firstName: req.body.infosPerso?.firstName,
+      lastName: req.body.infosPerso?.lastName,
+      },
       isVerified: false,
       emailVerifyToken
     });
@@ -123,16 +126,18 @@ router.put('/update-infos', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/me', async (req, res) => {
-    try {
-      const user = await User.findById(req.user.userId).select('-password');
-      if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
-  
-      res.json(user);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+router.get("/me", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password").lean();
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
-  });
+
+    res.json({email: user.email, infosPerso: user.infosPerso || {}, role: user.role});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
   
 module.exports = router;
 

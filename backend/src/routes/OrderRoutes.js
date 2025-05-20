@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const auth = require('../middleware/authMiddleware');
+const verifyToken = require('../middleware/verifyToken');
+const isAdmin = require('../middleware/isAdmin');
 
 // 📥 Enregistrer une nouvelle commande
 router.post('/', auth, async (req, res) => {
@@ -22,6 +24,30 @@ router.post('/', auth, async (req, res) => {
     }
   });
   
+router.get('/admin/all', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // page actuelle
+    const limit = parseInt(req.query.limit) || 10; // nombre par page
+    const skip = (page - 1) * limit;
+
+    const total = await Order.countDocuments();
+    const orders = await Order.find()
+      .sort({ createdAt: -1 }) // les plus récentes d'abord
+      .skip(skip)
+      .limit(limit)
+      .populate('user', 'email'); // facultatif : récupérer l'email utilisateur
+
+    res.json({
+      total,
+      page,
+      pageSize: orders.length,
+      totalPages: Math.ceil(total / limit),
+      results: orders
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur récupération commandes', details: error.message });
+  }
+});
 
 // 📄 Voir toutes les commandes de l'utilisateur connecté
 router.get('/me', auth, async (req, res) => {
@@ -34,10 +60,8 @@ router.get('/me', auth, async (req, res) => {
 });
 
 
-const isAdmin = require('../middleware/isAdmin');
-
 // ✅ Modifier uniquement le statut de la commande (admin uniquement)
-router.put('/:id/status', auth, isAdmin, async (req, res) => {
+router.put('/:id/status', verifyToken, isAdmin, async (req, res) => {
   const { status } = req.body;
   const allowedStatus = ['en attente', 'payée', 'expédiée', 'livrée', 'annulée'];
 
@@ -63,7 +87,7 @@ router.put('/:id/status', auth, isAdmin, async (req, res) => {
 });
 
 // 🔍 Recherche de commandes par prénom ou nom (admin uniquement)
-router.get('/search', auth, isAdmin, async (req, res) => {
+router.get('/search', verifyToken, isAdmin, async (req, res) => {
   const { name } = req.query;
 
   if (!name) {
@@ -86,7 +110,7 @@ router.get('/search', auth, isAdmin, async (req, res) => {
 });
 // 🔍 Recherche de commandes par ID (admin uniquement)
 
-router.get('/:id', auth, isAdmin, async (req, res) => {
+router.get('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -102,7 +126,7 @@ router.get('/:id', auth, isAdmin, async (req, res) => {
 );
 // 🗑️ Supprimer une commande (admin uniquement)
 
-router.delete('/:id', auth, isAdmin, async (req, res) => {
+router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const order = await Order.findByIdAndDelete(req.params.id);
 
