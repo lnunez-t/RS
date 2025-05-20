@@ -8,7 +8,7 @@ type Order = {
   total: number;
   createdAt: string;
   status: string;
-  user?: { email?: string }; // si tu ajoutes populate('user', 'email') côté backend
+  user?: { email?: string };
 };
 
 export default function OrderAdminPage() {
@@ -16,6 +16,7 @@ export default function OrderAdminPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const limit = 10;
 
   const router = useRouter();
@@ -61,9 +62,22 @@ export default function OrderAdminPage() {
     }
   };
 
+  const filteredOrders = orders.filter((order) =>
+    order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    order.user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Commandes clients</h1>
+
+      <input
+        type="text"
+        placeholder="Rechercher par ID ou email"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full max-w-md px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+      />
 
       {loading ? (
         <p>Chargement...</p>
@@ -81,11 +95,15 @@ export default function OrderAdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
-                  <tr key={order._id} className="text-sm">
+                {filteredOrders.map((order) => (
+                  <tr
+                    key={order._id}
+                    className="text-sm cursor-pointer hover:bg-gray-100 transition"
+                    onClick={() => router.push(`/admin/orders/${order._id}`)}
+                  >
                     <td className="px-4 py-2 border">{order._id}</td>
                     <td className="px-4 py-2 border">{order.total.toFixed(2)} €</td>
-                    <td className="px-4 py-2 border">{new Date(order.createdAt).toLocaleString('fr-FR')}</td>
+                    <td className="px-4 py-2 border">{new Date(order.createdAt).toLocaleDateString('fr-FR')}</td>
                     <td className="px-4 py-2 border capitalize">{order.status}</td>
                     <td className="px-4 py-2 border">{order.user?.email || 'N/A'}</td>
                   </tr>

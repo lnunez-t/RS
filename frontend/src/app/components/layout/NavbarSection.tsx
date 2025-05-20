@@ -15,7 +15,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
-const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
+const NavbarSection = ({ children, className = '' }: { children?: React.ReactNode; className?: string }) => {
+
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { isCartOpen, openCart, closeCart } = useCart();
@@ -32,7 +33,8 @@ const NavbarSection = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <div>
-      <nav className="bg-white text-black p-4 border-b border-gray-200">
+      <nav className={`bg-white text-black p-4 border-b border-gray-200 ${className}`}>
+
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* MOBILE: Menu icon */}
           <div className="md:hidden flex items-center">

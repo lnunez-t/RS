@@ -4,9 +4,9 @@ import {Input} from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 
-const NewsletterSection =  ({ children }: { children?: React.ReactNode }) => {
+const NewsletterSection =  ({ children, className = '' }: { children?: React.ReactNode; className?: string }) => {
     return (
-        <section className="w-full py-16 bg-[#ccaea4]">
+        <section className={`w-full py-16 bg-[#ccaea4] ${className}`}>
             <Card className="max-w-[1440px] mx-auto bg-transparent border-none shadow-none">
                 <CardContent className="flex flex-col items-center justify-center space-y-6 p-6">
                     <div className="font-bold text-base text-[#faf2ea] text-center font-['Playfair_Display-Bold', Helvetica]">

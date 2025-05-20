@@ -112,7 +112,7 @@ router.get('/search', verifyToken, isAdmin, async (req, res) => {
 
 router.get('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user', 'email').populate('items.productId', 'name images');
 
     if (!order) {
       return res.status(404).json({ message: 'Commande non trouvée' });
