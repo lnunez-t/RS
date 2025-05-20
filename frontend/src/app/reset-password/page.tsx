@@ -1,14 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Suspense } from "react";
 
 const ResetPasswordPage = () => {
     const searchParams = useSearchParams();
-
     const router = useRouter();
 
     const [password, setPassword] = useState("");
@@ -19,8 +17,8 @@ const ResetPasswordPage = () => {
     const [token, setToken] = useState("");
 
     useEffect(() => {
-        const tokenFromUrl = searchParams.get('token');
-        const emailFromUrl = searchParams.get('email');
+        const tokenFromUrl = searchParams.get("token");
+        const emailFromUrl = searchParams.get("email");
         if (tokenFromUrl) setToken(tokenFromUrl);
         if (emailFromUrl) setEmail(emailFromUrl);
     }, [searchParams]);
@@ -41,7 +39,7 @@ const ResetPasswordPage = () => {
             if (res.ok) {
                 setMessage("Mot de passe réinitialisé avec succès.");
                 setError("");
-                setTimeout(() => router.push("/Profile"), 3000); // redirige vers la connexion
+                setTimeout(() => router.push("/Profile"), 3000);
             } else {
                 setError("Lien invalide ou expiré.");
                 setMessage("");
@@ -53,9 +51,11 @@ const ResetPasswordPage = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#faf2ea]">
-            <h2 className="text-2xl font-bold text-[#392e2c] mb-6">Nouveau mot de passe</h2>
-            <div className="w-[400px]">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#faf2ea] px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#392e2c] mb-6 text-center">
+                Nouveau mot de passe
+            </h2>
+            <div className="w-full max-w-[400px] bg-white p-6 rounded-xl shadow-md">
                 <Input
                     type="password"
                     placeholder="Nouveau mot de passe"
@@ -70,22 +70,26 @@ const ResetPasswordPage = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="mb-4 h-[42px] rounded-[20px] border border-solid border-[#ffae9d]"
                 />
-                <Button onClick={handleReset} className="cursor-pointer w-full bg-[#ccaea4] text-white rounded-[20px]">
+                <Button
+                    onClick={handleReset}
+                    className="cursor-pointer w-full bg-[#ccaea4] text-white rounded-[20px]"
+                >
                     Réinitialiser
                 </Button>
-                {message && <p className="mt-4 text-green-600">{message}</p>}
-                {error && <p className="mt-4 text-red-500">{error}</p>}
+                {message && <p className="mt-4 text-green-600 text-sm sm:text-base">{message}</p>}
+                {error && <p className="mt-4 text-red-500 text-sm sm:text-base">{error}</p>}
             </div>
         </div>
     );
-}
+};
 
 const ResetPasswordWrapper = () => (
-    <Suspense fallback={<div>Chargement...</div>}>
+    <Suspense fallback={<div className="text-center mt-20">Chargement...</div>}>
         <ResetPasswordPage />
     </Suspense>
 );
 
 export default ResetPasswordWrapper;
+
 
 

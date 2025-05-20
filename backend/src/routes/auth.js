@@ -123,7 +123,7 @@ router.put('/update-infos', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/me', authMiddleware, async (req, res) => {
+router.get('/me', async (req, res) => {
     try {
       const user = await User.findById(req.user.userId).select('-password');
       if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });

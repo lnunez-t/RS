@@ -5,11 +5,15 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
+import MesInformations from './components/infos'
+import InfosClient from "./components/infos";
+
 const profileNavItems = ["Mes commandes", "Mes informations", "Deconnexion"];
 
 export default function DashboardPage() {
     const router = useRouter();
     const [isChecking, setIsChecking] = useState(true);
+    const [activeTab, setActiveTab] = useState("Mes commandes");
 
     useEffect(() => {
         const isLoggedIn = localStorage.getItem("IsLoggedIn");
@@ -41,6 +45,8 @@ export default function DashboardPage() {
                                 if (item === "Deconnexion") {
                                     localStorage.setItem("IsLoggedIn", "false");
                                     router.push("/Profile");
+                                } else {
+                                    setActiveTab(item);
                                 }
                             }}
                         >
@@ -51,25 +57,32 @@ export default function DashboardPage() {
             </div>
 
             {/* Contenu principal */}
-            <main className="flex flex-col items-center justify-center w-full max-w-[600px] text-center py-10">
-                <div className="relative mb-10">
-                    <Package className="w-20 h-20 mx-auto text-[#392e2c]" />
-                    <div className="absolute w-6 h-6 top-0 right-0 bg-[#392e2c] rounded-full border flex items-center justify-center">
-                        <span className="text-white text-sm font-bold">0</span>
-                    </div>
-                </div>
+            <main className="flex flex-col items-center w-full max-w-[800px] px-4 py-10">
+                {activeTab === "Mes commandes" && (
+                    <>
+                        <div className="relative mb-10">
+                            <Package className="w-20 h-20 mx-auto text-[#392e2c]" />
+                            <div className="absolute w-6 h-6 top-0 right-0 bg-[#392e2c] rounded-full border flex items-center justify-center">
+                                <span className="text-white text-sm font-bold">0</span>
+                            </div>
+                        </div>
 
-                <h1 className="text-[#392e2c] text-lg sm:text-xl font-bold mb-10">
-                    Vous n&apos;avez effectué aucune commande.
-                </h1>
+                        <h1 className="text-[#392e2c] text-lg sm:text-xl font-bold mb-10 text-center">
+                            Vous n&apos;avez effectué aucune commande.
+                        </h1>
 
-                <Button
-                    onClick={() => router.push("/Shop")}
-                    className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[42px] px-6 text-white font-bold text-base"
-                >
-                    Explorer nos produits
-                </Button>
+                        <Button
+                            onClick={() => router.push("/Shop")}
+                            className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[42px] px-6 text-white font-bold text-base"
+                        >
+                            Explorer nos produits
+                        </Button>
+                    </>
+                )}
+
+                {activeTab === "Mes informations" && <InfosClient />}
             </main>
+
         </div>
     );
 }
