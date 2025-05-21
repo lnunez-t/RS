@@ -17,9 +17,9 @@ const rightLinks = [
     {text: "Politique de Confidentialite", href: "ConfidPolicy"},
 ];
 
-const FooterSection =  ({ children }: { children?: React.ReactNode }) => {
+const FooterSection =  ({ children, className = '' }: { children?: React.ReactNode; className?: string }) => {
     return (
-        <footer className="w-full py-12 bg-transparent">
+        <footer className={`w-full py-12 bg-transparent ${className}`}>
             <div className="container mx-auto px-4">
                 <div className="flex flex-col md:flex-row justify-between">
                     <div className="flex flex-col mb-8 md:mb-0">

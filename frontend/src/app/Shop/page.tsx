@@ -9,30 +9,9 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ChevronDown } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useProduct } from "@/lib/contexts/ProductContext";
-
-const products = [
-  {
-    id: 1,
-    name: "La printaniere",
-    price: "30 €",
-    image: "/banane2.svg",
-  },
-  {
-    id: 2,
-    name: "Chouchous satines (x4)",
-    price: "15 €",
-    image: "/chouchous_soie.svg",
-  },
-  {
-    id: 3,
-    name: "Veste brodee motif fleuri",
-    price: "80 €",
-    image: "/veste_fleurie.svg",
-  },
-];
 
 const filterOptions = [
   { id: 1, name: "TYPE" },
@@ -43,11 +22,41 @@ const filterOptions = [
 export default function ShopPage() {
   const router = useRouter();
   const { selectProduct } = useProduct();
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchProducts = async (pageNumber = 1) => {
+    try {
+      const res = await fetch(
+        `http://localhost:4338/clothing/all_clothing?page=${pageNumber}&limit=9`
+      );
+      const data = await res.json();
+      console.log(data.results);
+      setProducts(data.results);
+      setPage(data.page);
+      setTotalPages(Math.ceil(data.total / data.limit));
+    } catch (error) {
+      console.error("Erreur lors de la récupération des produits :", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleProductClick = (product: any) => {
     selectProduct(product);
+    console.log(product.image);
     router.push("/Product");
   };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    fetchProducts(newPage);
+  };
+
+ 
 
   return (
     <div className="bg-[#faf2ea] w-full px-4 sm:px-6 lg:px-12 py-8">
@@ -75,9 +84,9 @@ export default function ShopPage() {
 
         {/* Produits */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-          {products.map((product) => (
+          {products.map((product: any) => (
             <div
-              key={product.id}
+              key={product._id}
               className="cursor-pointer flex flex-col"
               onClick={() => handleProductClick(product)}
             >
@@ -86,7 +95,7 @@ export default function ShopPage() {
                   <img
                     className="w-full h-auto object-cover"
                     alt={product.name}
-                    src={product.image}
+                    src={product.images?.[0]}
                   />
                 </CardContent>
               </Card>
@@ -95,21 +104,22 @@ export default function ShopPage() {
                   {product.name}
                 </h3>
                 <span className="font-bold text-[#392e2c] text-lg mt-2 block">
-                  {product.price}
+                  {product.price} €
                 </span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Pagination */}
+        {/* Pagination dynamique */}
         <Pagination className="mt-16 flex justify-center">
           <PaginationContent>
-            {[1, 2, 3, 4, "...", 7].map((num, index) => (
-              <PaginationItem key={index}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <PaginationItem key={num}>
                 <PaginationLink
-                  isActive={num === 1}
-                  className="font-bold text-[#392e2c] text-xl sm:text-2xl"
+                  isActive={num === page}
+                  onClick={() => handlePageChange(num)}
+                  className="cursor-pointer font-bold text-[#392e2c] text-xl sm:text-2xl"
                 >
                   {num}
                 </PaginationLink>

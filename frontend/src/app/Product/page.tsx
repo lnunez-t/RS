@@ -103,13 +103,46 @@ export default function ProductPage() {
                 {/* PRODUIT */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16">
                     {/* Image */}
-                    <div className="flex justify-center md:w-1/2">
+                    {/* <div className="flex justify-center md:w-1/2">
                         <img
                             className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-cover"
                             alt={selectedProduct.name}
-                            src={selectedProduct.image}
+                            src={selectedProduct.images}
                         />
+                    </div> */}
+
+                    {/* Galerie d'images du produit */}
+                    <div className="flex justify-center md:w-1/2">
+                    <Carousel
+                        opts={{
+                        align: "start",
+                        loop: true,
+                        }}
+                        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+                    >
+                        <CarouselContent>
+                        {selectedProduct.images?.map((img: string, index: number) => (
+                            <CarouselItem key={index} className="flex justify-center">
+                            <img
+                                src={img}
+                                alt={`${selectedProduct.name} image ${index + 1}`}
+                                className="w-full h-auto object-cover rounded-md shadow"
+                            />
+                            </CarouselItem>
+                        ))}
+                        </CarouselContent>
+
+                        {/* Boutons navigation */}
+                        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
+                        <ChevronLeft className="w-6 h-6 text-[#392e2c]" />
+                        </CarouselPrevious>
+
+                        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
+                        <ChevronRight className="w-6 h-6 text-[#392e2c]" />
+                        </CarouselNext>
+                    </Carousel>
                     </div>
+
 
                     {/* Infos */}
                     <div className="md:w-1/2">
@@ -117,7 +150,7 @@ export default function ProductPage() {
                             {selectedProduct.name}
                         </h1>
                         <p className="font-bold text-[#ffae9d] text-xl mb-4">
-                            {selectedProduct.price}
+                            {selectedProduct.price} €
                         </p>
 
                         <div className="text-center mb-6 font-bold text-[#392e2c] text-xs underline">

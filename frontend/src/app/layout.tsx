@@ -25,10 +25,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CartProvider>
           <ProductProvider>
-            <NavbarSection />
+            <NavbarSection className="print:hidden" />
+
               {children}
-            <NewsletterSection />
-            <FooterSection />
+            <NewsletterSection className="print:hidden" />
+            <FooterSection className="print:hidden" />
           </ProductProvider>
         </CartProvider>
       </body>
