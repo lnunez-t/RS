@@ -133,7 +133,7 @@ router.get("/me", authenticate, async (req, res) => {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
 
-    res.json({email: user.email, infosPerso: user.infosPerso || {}, role: user.role});
+    res.json({email: user.email, infosPerso: user.infosPerso});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

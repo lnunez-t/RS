@@ -43,6 +43,7 @@ export default function CreateAccount() {
             setError("Les mots de passe ne correspondent pas.");
             return;
         }
+        console.log(firstName);
 
         try {
             const response = await fetch("http://localhost:4338/api/auth/register", {

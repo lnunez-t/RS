@@ -8,14 +8,14 @@ import { Input } from "@/components/ui/input";
 
 export default function InfosClient() {
     const [userData, setUserData] = useState({
-        nom: "",
-        prenom: "",
+        firstName: "",
+        lastName: "",
         email: "",
     });
     
     const [message, setMessage] = useState("");
 
-     const router = useRouter();
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
 
     // useEffect(() => {
@@ -55,11 +55,11 @@ export default function InfosClient() {
                 });
                 const data = await res.json();
                 console.log(data);
-                console.log(data.infosPerso.firstName);
+                console.log(data.infosPerso);
                 setUserData({
                     email: data.email,
-                    nom: data.infosPerso?.lastName || "",
-                    prenom: data.infosPerso?.firstName || ""
+                    lastName: data.infosPerso?.lastName || "",
+                    firstName: data.infosPerso?.firstName || ""
                 });
                 setLoading(false);
             } catch (err) {
@@ -104,8 +104,8 @@ export default function InfosClient() {
             <div>
                 <label className="block text-sm font-medium text-[#392e2c]">Nom</label>
                 <Input
-                name="nom"
-                value={userData.nom}
+                name="lastName"
+                value={userData.lastName}
                 onChange={handleChange}
                 className="w-full border border-[#ffae9d] rounded-xl px-4 py-2 mt-1"
             />
@@ -114,8 +114,8 @@ export default function InfosClient() {
             <div>
                 <label className="block text-sm font-medium text-[#392e2c]">Prenom</label>
                  <Input
-                name="prenom"
-                value={userData.prenom}
+                name="firstName"
+                value={userData.firstName}
                 onChange={handleChange}
                 className="w-full border border-[#ffae9d] rounded-xl px-4 py-2 mt-1"
             />
