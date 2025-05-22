@@ -1,9 +1,8 @@
 Laura
 
-- remplacer logo principal navbar et reduit footer par ceux faits par Sandra (cf discord)
 - revoir le css pour fit avec Figma
-- attention a la police qui n'est pas la meme que sur Figma
 - garder la navbar en haut de page quand on defile la page vers le bas
+- ajouter les preremplissage des champs pour la page connexion comme pour la page creation de compte
 
 Max
 

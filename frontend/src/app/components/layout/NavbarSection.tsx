@@ -19,7 +19,7 @@ const NavbarSection = ({ children, className = '' }: { children?: React.ReactNod
 
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { isCartOpen, openCart, closeCart } = useCart();
+  const { cartItems, isCartOpen, openCart, closeCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -112,10 +112,15 @@ const NavbarSection = ({ children, className = '' }: { children?: React.ReactNod
 
           {/* RIGHT on mobile: icons */}
           <div className="md:hidden flex items-center space-x-4">
-            <MagnifyingGlassIcon className="w-5 h-5 text-gray-700" />
             <button onClick={openCart} aria-label="panier">
               <ShoppingCartIcon className="w-5 h-5 text-[#392e2c]" />
+              { cartItems.length > 0 && (
+              <span className="relative -top-3 -right-3 bg-[#000] text-white text-xs font-bold rounded-full h-4 w-4 flex justify-center shadow">
+                {cartItems.length}
+              </span>
+            )}
             </button>
+            
             <button onClick={handleProfileClick} aria-label="profil">
               <UserIcon className="w-5 h-5 text-black" />
             </button>
@@ -146,6 +151,15 @@ const NavbarSection = ({ children, className = '' }: { children?: React.ReactNod
             >
               BOUTIQUE
             </Link>
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Recherche..."
+                className="w-full pl-4 pr-10 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ccaea4] text-sm"
+              />
+              <MagnifyingGlassIcon className="absolute top-1/2 right-3 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
+            </div>
+
           </div>
         )}
       </nav>

@@ -32,14 +32,20 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#faf2ea]">
-            <h2 className="text-2xl font-bold text-[#392e2c] mb-6">Mot de passe oublié</h2>
-            <div className="w-[400px]">
-                <label className="block mb-2 text-[#392e2c] font-bold">Entrez votre email</label>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#faf2ea] px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#392e2c] mb-6 text-center">
+                Mot de passe oublié
+            </h2>
+            <div className="w-full max-w-[400px] bg-white p-6 rounded-xl shadow-md">
+                <label className="block mb-2 text-[#392e2c] font-semibold text-sm sm:text-base">
+                    Entrez votre email
+                </label>
                 <Input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="mb-4 h-[42px] rounded-[20px] border border-solid border-[#ffae9d]"
+                    type="email"
+                    placeholder="exemple@domaine.com"
                 />
                 <Button
                     onClick={handleSubmit}
@@ -47,8 +53,8 @@ export default function ForgotPasswordPage() {
                 >
                     Envoyer
                 </Button>
-                {message && <p className="mt-4 text-green-600">{message}</p>}
-                {error && <p className="mt-4 text-red-500">{error}</p>}
+                {message && <p className="mt-4 text-green-600 text-sm sm:text-base">{message}</p>}
+                {error && <p className="mt-4 text-red-500 text-sm sm:text-base">{error}</p>}
             </div>
         </div>
     );

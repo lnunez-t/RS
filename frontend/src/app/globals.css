@@ -128,5 +128,5 @@ body {
   background-color: #faf2ea;
   margin: 0;
   padding: 0;
-  font-family: 'Playfair_Display-Bold', Helvetica; /* ou ta police personnalisée */
+  font-family: 'Playfair_Display-Bold'; /* ou ta police personnalisée */
 }

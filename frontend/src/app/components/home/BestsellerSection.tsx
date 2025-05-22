@@ -64,6 +64,7 @@ const BestsellerSection = ({ children }: { children?: React.ReactNode }) => {
                       src={product.image}
                       alt={product.alt}
                       className="w-full h-full object-cover rounded-md shadow"
+                      onClick={() => handleProductClick(product)}
                     />
                   </div>
                   <h3 className="text-lg font-bold text-center text-[#392e2c] font-playfair">
