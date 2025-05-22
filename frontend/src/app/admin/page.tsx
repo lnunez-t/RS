@@ -12,15 +12,11 @@ export default function AdminDashboard() {
       try {
         const res = await fetch('http://localhost:4338/useradmin/verify-token', {
           method: 'GET',
-          credentials: 'include', // Indispensable si tu utilises les cookies HTTP-only
+          credentials: 'include',
         });
 
-        if (!res.ok) {
-          throw new Error('Invalid token');
-        }
+        if (!res.ok) throw new Error('Invalid token');
 
-        // Token valide → continuer
-        console.log("test");
         setLoading(false);
       } catch (error) {
         router.push('/admin/login');
@@ -50,6 +46,13 @@ export default function AdminDashboard() {
         className="cursor-pointer px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
       >
         Gestion commandes
+      </button>
+
+      <button
+        onClick={() => router.push('/admin/send-email')}
+        className="cursor-pointer px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+      >
+        Envoyer un mail
       </button>
     </div>
   );

@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const formFields = [
@@ -17,6 +17,26 @@ export default function ProfilePage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // ✅ Vérifie si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const checkIfLoggedIn = async () => {
+      try {
+        const res = await fetch('http://localhost:4338/api/auth/verify-token', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (res.ok) {
+          router.push('/Dashboard');
+        }
+      } catch (err) {
+        console.log("Utilisateur non connecté");
+      }
+    };
+
+    checkIfLoggedIn();
+  }, [router]);
+
   const handleClick = async () => {
     try {
       const response = await fetch("http://localhost:4338/api/auth/login", {
@@ -27,7 +47,6 @@ export default function ProfilePage() {
       });
 
       if (response.status === 200) {
-        localStorage.setItem("IsLoggedIn", "true");
         router.push("/Dashboard");
       } else {
         setError("Email ou mot de passe incorrect.");

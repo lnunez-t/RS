@@ -4,87 +4,103 @@ import { Package } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-import MesInformations from './components/infos'
 import InfosClient from "./components/infos";
 
 const profileNavItems = ["Mes commandes", "Mes informations", "Deconnexion"];
 
 export default function DashboardPage() {
-    const router = useRouter();
-    const [isChecking, setIsChecking] = useState(true);
-    const [activeTab, setActiveTab] = useState("Mes commandes");
+  const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
+  const [activeTab, setActiveTab] = useState("Mes commandes");
 
-    useEffect(() => {
-        
-        const isLoggedIn = localStorage.getItem("IsLoggedIn");
-        if (isLoggedIn !== "true") {
-            router.push("/Profile");
-        } else {
-            setIsChecking(false);
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const res = await fetch("http://localhost:4338/api/auth/verify-token", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          throw new Error("Token invalide");
         }
-    }, [router]);
 
-    if (isChecking) {
-        return (
-            <div className="h-screen flex items-center justify-center">
-                Chargement...
-            </div>
-        );
-    }
+        setIsChecking(false);
+      } catch (err) {
+        router.push("/Profile");
+      }
+    };
 
+    checkToken();
+  }, [router]);
+
+  if (isChecking) {
     return (
-        <div className="bg-[#faf2ea] w-full min-h-screen flex flex-col items-center px-4">
-            {/* Navigation */}
-            <div className="w-full bg-[#ccaea4] py-4">
-                <div className="flex flex-wrap justify-center items-center gap-4">
-                    {profileNavItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className="cursor-pointer hover:border-b-2 hover:border-[#ffae9d] pb-1 text-white text-base font-bold"
-                            onClick={() => {
-                                if (item === "Deconnexion") {
-                                    localStorage.setItem("IsLoggedIn", "false");
-                                    router.push("/Profile");
-                                } else {
-                                    setActiveTab(item);
-                                }
-                            }}
-                        >
-                            {item}
-                        </div>
-                    ))}
-                </div>
+      <div className="h-screen flex items-center justify-center">
+        Chargement...
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-[#faf2ea] w-full min-h-screen flex flex-col items-center px-4">
+      {/* Navigation */}
+      <div className="w-full bg-[#ccaea4] py-4">
+        <div className="flex flex-wrap justify-center items-center gap-4">
+          {profileNavItems.map((item, index) => (
+            <div
+              key={index}
+              className="cursor-pointer hover:border-b-2 hover:border-[#ffae9d] pb-1 text-white text-base font-bold"
+              onClick={() => {
+                if (item === "Deconnexion") {
+                    fetch("http://localhost:4338/api/auth/logout", {
+                        method: "POST",
+                        credentials: "include",
+                    })
+                        .then(() => {
+                            router.push("/Profile");
+                        })
+                        .catch((err) => {
+                        console.error("Erreur lors de la déconnexion :", err);
+                        router.push("/Profile");
+                        });
+                    } else {
+                    setActiveTab(item);
+                    }
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Contenu principal */}
+      <main className="flex flex-col items-center w-full max-w-[800px] px-4 py-10">
+        {activeTab === "Mes commandes" && (
+          <>
+            <div className="relative mb-10">
+              <Package className="w-20 h-20 mx-auto text-[#392e2c]" />
+              <div className="absolute w-6 h-6 top-0 right-0 bg-[#392e2c] rounded-full border flex items-center justify-center">
+                <span className="text-white text-sm font-bold">0</span>
+              </div>
             </div>
 
-            {/* Contenu principal */}
-            <main className="flex flex-col items-center w-full max-w-[800px] px-4 py-10">
-                {activeTab === "Mes commandes" && (
-                    <>
-                        <div className="relative mb-10">
-                            <Package className="w-20 h-20 mx-auto text-[#392e2c]" />
-                            <div className="absolute w-6 h-6 top-0 right-0 bg-[#392e2c] rounded-full border flex items-center justify-center">
-                                <span className="text-white text-sm font-bold">0</span>
-                            </div>
-                        </div>
+            <h1 className="text-[#392e2c] text-lg sm:text-xl font-bold mb-10 text-center">
+              Vous n&apos;avez effectué aucune commande.
+            </h1>
 
-                        <h1 className="text-[#392e2c] text-lg sm:text-xl font-bold mb-10 text-center">
-                            Vous n&apos;avez effectué aucune commande.
-                        </h1>
+            <Button
+              onClick={() => router.push("/Shop")}
+              className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[42px] px-6 text-white font-bold text-base"
+            >
+              Explorer nos produits
+            </Button>
+          </>
+        )}
 
-                        <Button
-                            onClick={() => router.push("/Shop")}
-                            className="bg-[#ffae9d] hover:bg-[#ffae9d]/90 rounded-[20px] h-[42px] px-6 text-white font-bold text-base"
-                        >
-                            Explorer nos produits
-                        </Button>
-                    </>
-                )}
-
-                {activeTab === "Mes informations" && <InfosClient />}
-            </main>
-
-        </div>
-    );
+        {activeTab === "Mes informations" && <InfosClient />}
+      </main>
+    </div>
+  );
 }
-

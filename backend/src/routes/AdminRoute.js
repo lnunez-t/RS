@@ -3,7 +3,7 @@ const UserAdmin = require('../models/UserAdmin');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../middleware/verifyToken')
 const isAdmin = require('../middleware/isAdmin')
-
+const nodemailer = require('nodemailer');
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
@@ -74,6 +74,58 @@ router.get('/verify-token', verifyToken,isAdmin, isAdmin ,(req, res) => {
     message: 'Token is valid',
     user: req.user, // contient l’id et le rôle de l’admin
   });
+});
+
+
+
+router.post('/send-email', verifyToken, isAdmin, async (req, res) => {
+  const { email, subject, message } = req.body;
+
+  if (!email || !subject || !message) {
+    return res.status(400).json({ error: 'Champs manquants' });
+  }
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // ou autre
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const htmlContent = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <img src="https://res.cloudinary.com/di0ifatat/image/upload/v1747906734/rciuclqllvg5ojvyhrhg.svg" alt="Logo" style="max-width: 150px;" />
+        </div>
+
+        <h2 style="color: #333;">Bonjour,</h2>
+        <p style="font-size: 16px; color: #555;">
+          ${message.replace(/\n/g, '<br />')}
+        </p>
+
+        <hr style="margin: 30px 0;" />
+
+        <footer style="text-align: center; font-size: 14px; color: #888;">
+          Merci de votre confiance.<br />
+          <strong>Restrospective Studio</strong> • retrospectivestudio.shop@gmail.com
+        </footer>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: `"Restrospective Studio" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject,
+      html: htmlContent,
+    });
+
+    res.json({ message: 'E-mail envoyé' });
+  } catch (error) {
+    console.error('Erreur envoi e-mail :', error);
+    res.status(500).json({ error: 'Erreur serveur', details: error.message });
+  }
 });
 
 module.exports = router;
