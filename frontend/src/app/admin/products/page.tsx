@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 const allSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -27,16 +27,30 @@ export default function ProductAdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const init = async () => {
+    const verifyToken = async () => {
       try {
         const res = await fetch('http://localhost:4338/useradmin/verify-token', {
           method: 'GET',
           credentials: 'include',
         });
 
-        if (!res.ok) throw new Error('Token invalide');
-        setLoading(false);
+        if (!res.ok) {
+          throw new Error('Invalid token');
+        }
 
+        console.log("test");
+        setLoading(false);
+      } catch (error) {
+        router.push('/admin/login');
+      }
+    };
+
+    verifyToken();
+  }, [router]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
         const productsRes = await fetch('http://localhost:4338/clothing/all_clothing/admin', {
           credentials: 'include',
         });
@@ -51,10 +65,12 @@ export default function ProductAdminPage() {
       } catch (error) {
         console.error('Erreur dans useEffect :', error);
         router.push('/admin/login');
+      } finally {
+        setLoading(false);
       }
     };
 
-    init();
+    fetchProducts();
   }, []);
 
   const toggleVisibility = async (id: string, current: boolean) => {
@@ -105,7 +121,15 @@ export default function ProductAdminPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Gestion des vêtements</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Gestion des vêtements</h1>
+        <button
+          onClick={() => router.back()}
+          className="text-blue-600 underline"
+        >
+          ← Retour
+        </button>
+      </div>
 
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

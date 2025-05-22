@@ -34,7 +34,11 @@ export default function Invoice({ order }: { order: OrderDetails }) {
         <tbody>
           {order.items.map((item, i) => (
             <tr key={i}>
-              <td className="border p-2">{item.productId.name}</td>
+              <td className="border p-2">
+                {typeof item.productId === 'object' && item.productId !== null
+                  ? item.productId.name
+                  : 'Nom indisponible'}
+              </td>
               <td className="border p-2">{item.size}</td>
               <td className="border p-2">{item.color}</td>
               <td className="border p-2">{item.quantity}</td>

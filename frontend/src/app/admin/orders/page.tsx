@@ -17,6 +17,7 @@ export default function OrderAdminPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const limit = 10;
 
   const router = useRouter();
@@ -62,22 +63,62 @@ export default function OrderAdminPage() {
     }
   };
 
-  const filteredOrders = orders.filter((order) =>
-    order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.user?.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'payée':
+        return 'text-green-600 font-semibold';
+      case 'expédiée':
+        return 'text-blue-600 font-semibold';
+      case 'livrée':
+        return 'text-purple-600 font-semibold';
+      case 'annulée':
+        return 'text-red-600 font-semibold';
+      case 'en attente':
+      default:
+        return 'text-yellow-600 font-semibold';
+    }
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch =
+      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.user?.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus ? order.status === filterStatus : true;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Commandes clients</h1>
 
-      <input
-        type="text"
-        placeholder="Rechercher par ID ou email"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full max-w-md px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
-      />
+      <button
+        onClick={() => router.back()}
+        className="text-blue-600 underline mb-4"
+      >
+        ← Retour
+      </button>
+
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <input
+          type="text"
+          placeholder="Rechercher par ID ou email"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+        />
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded"
+        >
+          <option value="">Tous les statuts</option>
+          <option value="en attente">En attente</option>
+          <option value="payée">Payée</option>
+          <option value="expédiée">Expédiée</option>
+          <option value="livrée">Livrée</option>
+          <option value="annulée">Annulée</option>
+        </select>
+      </div>
 
       {loading ? (
         <p>Chargement...</p>
@@ -104,7 +145,7 @@ export default function OrderAdminPage() {
                     <td className="px-4 py-2 border">{order._id}</td>
                     <td className="px-4 py-2 border">{order.total.toFixed(2)} €</td>
                     <td className="px-4 py-2 border">{new Date(order.createdAt).toLocaleDateString('fr-FR')}</td>
-                    <td className="px-4 py-2 border capitalize">{order.status}</td>
+                    <td className={`px-4 py-2 border capitalize ${getStatusColor(order.status)}`}>{order.status}</td>
                     <td className="px-4 py-2 border">{order.user?.email || 'N/A'}</td>
                   </tr>
                 ))}

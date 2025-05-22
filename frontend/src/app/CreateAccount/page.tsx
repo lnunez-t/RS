@@ -70,8 +70,10 @@ export default function CreateAccount() {
                     <h1 className="w-full mb-12 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-2xl text-center tracking-[0] leading-normal">
                         INFORMATIONS PERSONNELLES
                     </h1>
-
-                    <div className="max-w-md mx-auto space-y-6">
+                    <form className="max-w-md mx-auto space-y-6" onSubmit={(e) => {
+                        e.preventDefault();
+                        handleClick();
+                        }}>
                         {formFields.map((field, index) => (
                             <div key={index} className="space-y-2">
                                 <label
@@ -139,7 +141,7 @@ export default function CreateAccount() {
                                 Connectez-vous
                             </a>
                         </div>
-                    </div>
+                    </form>
                 </main>
             </div>
         </div>
