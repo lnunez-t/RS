@@ -55,6 +55,9 @@ app.use('/api/contact', contactRoutes);
 const orderRoutes = require('./routes/OrderRoutes');
 app.use('/orders', orderRoutes);
 
+const notes = require('./routes/NoteRoutes');
+app.use('/notes', notes);
+
 // ⚠️ À NE PAS PARSER avec express.json()
 
 

@@ -6,6 +6,7 @@ const isAdmin = require('../middleware/isAdmin')
 const nodemailer = require('nodemailer');
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+const sendReviewEmail = require('../utils/sendReviewEmail');
 
 // Route to add a new admin
 /* router.post('/add', async (req, res) => {
@@ -127,5 +128,24 @@ router.post('/send-email', verifyToken, isAdmin, async (req, res) => {
     res.status(500).json({ error: 'Erreur serveur', details: error.message });
   }
 });
+
+
+
+router.post('/send-review-request',verifyToken,isAdmin, async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email requis' });
+  }
+
+  try {
+    await sendReviewEmail(email);
+    res.status(200).json({ message: 'E-mail d’invitation envoyé' });
+  } catch (error) {
+    console.error('Erreur envoi e-mail :', error);
+    res.status(500).json({ message: 'Erreur serveur lors de l’envoi de l’e-mail' });
+  }
+});
+
 
 module.exports = router;

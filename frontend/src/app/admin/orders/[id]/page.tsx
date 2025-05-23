@@ -96,6 +96,26 @@ export default function OrderDetailsPage() {
     };
   }, [printMode]);
 
+  const [note, setNote] = useState(null);
+
+useEffect(() => {
+  const fetchNote = async () => {
+    try {
+      const res = await fetch(`http://localhost:4338/admin/notes/${params.id}`, {
+        credentials: 'include',
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setNote(data[0]); // on prend la première note (si une seule attendue par commande)
+    } catch (err) {
+      console.error('Erreur récupération avis :', err);
+    }
+  };
+
+  fetchNote();
+}, [params.id]);
+
+
   // 🔄 Changement de statut
   const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
@@ -139,6 +159,35 @@ export default function OrderDetailsPage() {
       alert('Erreur réseau');
     }
   };
+
+  const handleSendReviewEmail = async () => {
+  if (!order?.user?.email) {
+    alert("Aucun email utilisateur disponible.");
+    return;
+  }
+
+  try {
+    const res = await fetch('http://localhost:4338/useradmin/send-review-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email: order.user.email }),
+    });
+
+    const data = await res.json();
+    console.log('test mail :', order.user.email);
+    if (res.ok) {
+      alert('E-mail de demande d’avis envoyé !');
+    } else {
+      alert(data.message || 'Erreur lors de l’envoi');
+    }
+  } catch (err) {
+    console.error('Erreur envoi e-mail :', err);
+    alert('Erreur réseau lors de l’envoi de l’e-mail');
+  }
+};
+
+
 
   if (loading) return <div className="p-6">Chargement...</div>;
   if (!order) return <div className="p-6">Commande introuvable.</div>;
@@ -217,7 +266,8 @@ export default function OrderDetailsPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 mt-8 print:hidden">
+      <div className="flex flex-wrap justify-between items-center mt-8 gap-4 print:hidden">
+      <div className="flex gap-4">
         <button onClick={() => setPrintMode('invoice')} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
           🧾 Imprimer la facture
         </button>
@@ -231,6 +281,14 @@ export default function OrderDetailsPage() {
           🗑️ Supprimer la commande
         </button>
       </div>
+      <button
+        onClick={handleSendReviewEmail}
+        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+      >
+        ✉️ Envoyer un e-mail d’avis
+      </button>
+    </div>
+
 
       <div className="hidden print:block absolute top-0 left-0 w-full z-50 bg-white">
         {printMode === 'invoice' && <Invoice order={order} />}
