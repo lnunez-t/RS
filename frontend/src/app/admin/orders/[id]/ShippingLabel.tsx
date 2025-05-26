@@ -12,7 +12,6 @@ export default function ShippingLabel({ order }: { order: OrderDetails }) {
         <p>{a?.adresse}</p>
         <p>{a?.codePostal} {a?.ville}</p>
         <p>{a?.pays}</p>
-        <p>Tél : {a?.telephone}</p>
       </div>
     </div>
   );

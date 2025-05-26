@@ -43,10 +43,10 @@ export default function OrderDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [printMode, setPrintMode] = useState<'invoice' | 'delivery' | 'label' | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [note, setNote] = useState<any>(null);
   const router = useRouter();
   const params = useParams();
 
-  // ✅ Vérifie que l'admin est connecté
   useEffect(() => {
     const verifyAdmin = async () => {
       try {
@@ -63,7 +63,6 @@ export default function OrderDetailsPage() {
     verifyAdmin();
   }, [router]);
 
-  // 🔄 Récupère la commande
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -84,39 +83,45 @@ export default function OrderDetailsPage() {
     fetchOrder();
   }, [params.id]);
 
-  // 🖨️ Impression
   useEffect(() => {
-    if (!printMode) return;
-    const timeout = setTimeout(() => window.print(), 100);
-    const handleAfterPrint = () => setPrintMode(null);
-    window.addEventListener('afterprint', handleAfterPrint);
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener('afterprint', handleAfterPrint);
+    const fetchNote = async () => {
+      try {
+        const res = await fetch(`http://localhost:4338/notes/${params.id}`, {
+          credentials: 'include',
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        console.log('✅ Note récupérée :', data[0]);
+        setNote(data[0]);
+      } catch (err) {
+        console.error('Erreur récupération avis :', err);
+      }
     };
-  }, [printMode]);
 
-  const [note, setNote] = useState(null);
+    fetchNote();
+  }, [params.id]);
 
-useEffect(() => {
-  const fetchNote = async () => {
+  const handleDeleteNote = async () => {
+    if (!note?._id) return;
+    if (!confirm('Supprimer cet avis client ?')) return;
     try {
-      const res = await fetch(`http://localhost:4338/admin/notes/${params.id}`, {
+      const res = await fetch(`http://localhost:4338/notes/${note._id}`, {
+        method: 'DELETE',
         credentials: 'include',
       });
-      if (!res.ok) return;
-      const data = await res.json();
-      setNote(data[0]); // on prend la première note (si une seule attendue par commande)
+      if (res.ok) {
+        alert('Avis client supprimé.');
+        setNote(null);
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Erreur lors de la suppression');
+      }
     } catch (err) {
-      console.error('Erreur récupération avis :', err);
+      console.error('Erreur suppression note :', err);
+      alert('Erreur réseau');
     }
   };
 
-  fetchNote();
-}, [params.id]);
-
-
-  // 🔄 Changement de statut
   const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
     if (!order) return;
@@ -138,7 +143,6 @@ useEffect(() => {
     }
   };
 
-  // 🗑️ Suppression
   const handleDelete = async () => {
     if (!order) return;
     if (!confirm('Confirmer la suppression de cette commande ?')) return;
@@ -161,33 +165,33 @@ useEffect(() => {
   };
 
   const handleSendReviewEmail = async () => {
-  if (!order?.user?.email) {
-    alert("Aucun email utilisateur disponible.");
-    return;
-  }
-
-  try {
-    const res = await fetch('http://localhost:4338/useradmin/send-review-request', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ email: order.user.email }),
-    });
-
-    const data = await res.json();
-    console.log('test mail :', order.user.email);
-    if (res.ok) {
-      alert('E-mail de demande d’avis envoyé !');
-    } else {
-      alert(data.message || 'Erreur lors de l’envoi');
+    if (!order?.user?.email) {
+      alert("Aucun email utilisateur disponible.");
+      return;
     }
-  } catch (err) {
-    console.error('Erreur envoi e-mail :', err);
-    alert('Erreur réseau lors de l’envoi de l’e-mail');
-  }
-};
 
+    try {
+      const res = await fetch('http://localhost:4338/useradmin/send-review-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: order.user.email,
+          orderId: order._id,
+        }),
+      });
 
+      const data = await res.json();
+      if (res.ok) {
+        alert('E-mail de demande d’avis envoyé !');
+      } else {
+        alert(data.message || 'Erreur lors de l’envoi');
+      }
+    } catch (err) {
+      console.error('Erreur envoi e-mail :', err);
+      alert('Erreur réseau lors de l’envoi de l’e-mail');
+    }
+  };
 
   if (loading) return <div className="p-6">Chargement...</div>;
   if (!order) return <div className="p-6">Commande introuvable.</div>;
@@ -203,92 +207,119 @@ useEffect(() => {
 
       <h1 className="text-2xl font-bold">Commande {order._id}</h1>
 
-      <div className="flex items-center gap-4">
-        <p><strong>Statut :</strong> {order.status}</p>
-        <select
-          value={order.status}
-          onChange={handleStatusChange}
-          disabled={updatingStatus}
-          className="border rounded px-2 py-1 text-sm"
-        >
-          {allowedStatuses.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-      </div>
+      <div className="flex items-start gap-6">
+        <div className="flex-1 space-y-6">
+          <div className="flex items-center gap-4">
+            <p><strong>Statut :</strong> {order.status}</p>
+            <select
+              value={order.status}
+              onChange={handleStatusChange}
+              disabled={updatingStatus}
+              className="border rounded px-2 py-1 text-sm"
+            >
+              {allowedStatuses.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
 
-      <p><strong>Montant :</strong> {order.total.toFixed(2)} €</p>
-      <p><strong>Date :</strong> {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
-      <p><strong>Email client :</strong> {order.user?.email || 'N/A'}</p>
+          <p><strong>Montant :</strong> {order.total.toFixed(2)} €</p>
+          <p><strong>Date :</strong> {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
+          <p><strong>Email client :</strong> {order.user?.email || 'N/A'}</p>
 
-      <div>
-        <h2 className="text-lg font-semibold mt-4">Adresse de livraison</h2>
-        <p>{order.shippingAddress?.firstName} {order.shippingAddress?.lastName}</p>
-        <p>{order.shippingAddress?.adresse}</p>
-        <p>{order.shippingAddress?.codePostal} {order.shippingAddress?.ville}</p>
-        <p>{order.shippingAddress?.pays}</p>
-        <p>Téléphone : {order.shippingAddress?.telephone}</p>
-      </div>
+          <div>
+            <h2 className="text-lg font-semibold mt-4">Adresse de livraison</h2>
+            <p>{order.shippingAddress?.firstName} {order.shippingAddress?.lastName}</p>
+            <p>{order.shippingAddress?.adresse}</p>
+            <p>{order.shippingAddress?.codePostal} {order.shippingAddress?.ville}</p>
+            <p>{order.shippingAddress?.pays}</p>
+            <p>Téléphone : {order.shippingAddress?.telephone}</p>
+          </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mt-4">Produits</h2>
-        <div className="mt-4 space-y-4">
-          {order.items.map((item, i) => (
-            <div key={i} className="flex items-center gap-4 border border-gray-200 rounded-lg p-4 shadow-sm">
-              <div className="flex-shrink-0">
-                {typeof item.productId === 'object' && item.productId?.images?.[0] ? (
-                  <img
-                    src={item.productId.images[0]}
-                    alt={item.productId.name}
-                    className="w-20 h-20 object-cover rounded-md border"
-                  />
-                ) : (
-                  <div className="w-20 h-20 bg-gray-100 flex items-center justify-center rounded-md text-gray-400 text-sm">
-                    Aucune image
+          <div>
+            <h2 className="text-lg font-semibold mt-4">Produits</h2>
+            <div className="mt-4 space-y-4">
+              {order.items.map((item, i) => (
+                <div key={i} className="flex items-center gap-4 border border-gray-200 rounded-lg p-4 shadow-sm">
+                  <div className="flex-shrink-0">
+                    {typeof item.productId === 'object' && item.productId?.images?.[0] ? (
+                      <img
+                        src={item.productId.images[0]}
+                        alt={item.productId.name}
+                        className="w-20 h-20 object-cover rounded-md border"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 bg-gray-100 flex items-center justify-center rounded-md text-gray-400 text-sm">
+                        Aucune image
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <p className="font-medium">
-                  {typeof item.productId === 'object' && item.productId !== null
-                    ? item.productId.name
-                    : 'Nom indisponible'}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Taille : <strong>{item.size}</strong>, Couleur : <strong>{item.color}</strong>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Quantité : <strong>{item.quantity}</strong>
-                </p>
-              </div>
+                  <div className="flex flex-col">
+                    <p className="font-medium">
+                      {typeof item.productId === 'object' && item.productId !== null
+                        ? item.productId.name
+                        : 'Nom indisponible'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Taille : <strong>{item.size}</strong>, Couleur : <strong>{item.color}</strong>
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Quantité : <strong>{item.quantity}</strong>
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div className="flex flex-wrap justify-between items-center mt-8 gap-4 print:hidden">
+            <div className="flex gap-4">
+              <button onClick={() => setPrintMode('invoice')} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                🧾 Imprimer la facture
+              </button>
+              <button onClick={() => setPrintMode('delivery')} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                📦 Bon de commande
+              </button>
+              <button onClick={() => setPrintMode('label')} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">
+                🏷️ Étiquette colis
+              </button>
+              <button onClick={handleDelete} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                🗑️ Supprimer la commande
+              </button>
+            </div>
+            <button
+              onClick={handleSendReviewEmail}
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            >
+              ✉️ Envoyer un e-mail d’avis
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-wrap justify-between items-center mt-8 gap-4 print:hidden">
-      <div className="flex gap-4">
-        <button onClick={() => setPrintMode('invoice')} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          🧾 Imprimer la facture
-        </button>
-        <button onClick={() => setPrintMode('delivery')} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          📦 Bon de commande
-        </button>
-        <button onClick={() => setPrintMode('label')} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">
-          🏷️ Étiquette colis
-        </button>
-        <button onClick={handleDelete} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-          🗑️ Supprimer la commande
-        </button>
-      </div>
+       <div className="w-full max-w-xs border border-gray-300 rounded-lg p-4 shadow-md relative">
+  <h2 className="text-lg font-semibold mb-2">Avis client</h2>
+
+  {note ? (
+    <>
       <button
-        onClick={handleSendReviewEmail}
-        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+        onClick={handleDeleteNote}
+        className="absolute top-2 right-2 text-gray-400 hover:text-red-600"
+        title="Supprimer l'avis"
       >
-        ✉️ Envoyer un e-mail d’avis
+        ✕
       </button>
-    </div>
+      <p className="font-medium">{note.name}</p>
+      <p className="text-yellow-500 text-xl">
+        {'★'.repeat(note.rating)}{'☆'.repeat(5 - note.rating)}
+      </p>
+      <p className="text-gray-700 mt-2 italic">{note.comment}</p>
+    </>
+  ) : (
+    <p className="text-gray-500 italic">Aucun avis n’a encore été laissé pour cette commande.</p>
+  )}
+</div>
 
+      </div>
 
       <div className="hidden print:block absolute top-0 left-0 w-full z-50 bg-white">
         {printMode === 'invoice' && <Invoice order={order} />}
@@ -297,4 +328,4 @@ useEffect(() => {
       </div>
     </div>
   );
-}
+} 

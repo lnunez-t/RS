@@ -7,6 +7,8 @@ const nodemailer = require('nodemailer');
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 const sendReviewEmail = require('../utils/sendReviewEmail');
+const Order = require('../models/Order');
+const User = require('../models/User');
 
 // Route to add a new admin
 /* router.post('/add', async (req, res) => {
@@ -131,15 +133,15 @@ router.post('/send-email', verifyToken, isAdmin, async (req, res) => {
 
 
 
-router.post('/send-review-request',verifyToken,isAdmin, async (req, res) => {
-  const { email } = req.body;
+router.post('/send-review-request', verifyToken, isAdmin, async (req, res) => {
+  const { email, orderId } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ message: 'Email requis' });
+  if (!email || !orderId) {
+    return res.status(400).json({ message: 'Email et orderId requis' });
   }
 
   try {
-    await sendReviewEmail(email);
+    await sendReviewEmail(email, orderId);
     res.status(200).json({ message: 'E-mail d’invitation envoyé' });
   } catch (error) {
     console.error('Erreur envoi e-mail :', error);
@@ -147,5 +149,55 @@ router.post('/send-review-request',verifyToken,isAdmin, async (req, res) => {
   }
 });
 
+
+
+router.get('/users', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const users = await User.find().select('-password'); // on ne retourne pas le mot de passe
+    res.json(users);
+  } catch (err) {
+    console.error('Erreur récupération utilisateurs :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+
+// routes/AdminRoute.js
+router.get('/users/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id); // ici, req.params.id doit exister
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Erreur récupération utilisateur :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+router.put('/users/:id', verifyToken, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { infosPerso } = req.body;
+
+  if (!infosPerso) {
+    return res.status(400).json({ message: 'Aucune donnée à mettre à jour.' });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { infosPerso },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error('Erreur mise à jour utilisateur :', err);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+});
 
 module.exports = router;

@@ -16,25 +16,18 @@ router.post('/notes', async (req, res) => {
   }
 
   try {
+    // 1. Vérifie le token JWT
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { email: decodedEmail, orderId } = decoded;
 
+    if (decodedEmail !== email) {
+      return res.status(401).json({ message: 'Token invalide pour cet email.' });
+    }
 
-    // 0.5. Vérifie s'il y a déjà une note pour cette commande
+    // 2. Vérifie s'il y a déjà une note pour cette commande
     const existing = await Note.findOne({ orderId });
     if (existing) {
       return res.status(400).json({ message: 'Un avis a déjà été laissé pour cette commande.' });
-    }
-
-    // 1. Vérifie si le token a déjà été utilisé
-    const alreadyUsed = await UsedToken.findOne({ token });
-    if (alreadyUsed) {
-      return res.status(400).json({ message: 'Ce lien a déjà été utilisé.' });
-    }
-
-
-    // 2. Vérifie le token JWT
-    const decoded = jwt.verify(token, JWT_SECRET);
-    if (decoded.email !== email) {
-      return res.status(401).json({ message: 'Token invalide pour cet email.' });
     }
 
     // 3. (optionnel) Lier à un utilisateur existant
@@ -45,9 +38,11 @@ router.post('/notes', async (req, res) => {
       name,
       rating,
       comment,
+      email,
       author: user?._id || undefined,
       orderId,
     });
+
     await note.save();
 
     res.status(201).json({ message: 'Merci pour votre avis !' });
@@ -56,6 +51,7 @@ router.post('/notes', async (req, res) => {
     res.status(400).json({ message: 'Token invalide ou expiré.' });
   }
 });
+
 
 
 router.get('/:orderId',verifyToken,isAdmin, async (req, res) => {
@@ -72,6 +68,39 @@ router.get('/:orderId',verifyToken,isAdmin, async (req, res) => {
   } catch (err) {
     console.error('Erreur récupération note par commande :', err);
     res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+
+router.delete('/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const deleted = await Note.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Avis non trouvé" });
+    }
+    res.status(200).json({ message: "Avis supprimé avec succès" });
+  } catch (err) {
+    console.error("Erreur suppression avis :", err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+// GET toutes les notes avec la note moyenne
+router.get('/public', async (req, res) => {
+  try {
+    const notes = await Note.find();
+    const moyenne =
+      notes.length > 0
+        ? notes.reduce((sum, n) => sum + (n.rating || 0), 0) / notes.length
+        : 0;
+
+    res.json({
+      notes,
+      moyenne: moyenne.toFixed(1),
+    });
+  } catch (err) {
+    console.error('Erreur récupération notes publiques :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 

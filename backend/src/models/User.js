@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
     telephone: { type: String },
     pays: { type: String },
     genre: { type: String },
-    dateNaissance: {type: Date}
+    dateNaissance: {type: Date},
+    point_fedeliter: { type: Number, default: 0 }
   },
   isVerified: {
     type: Boolean,

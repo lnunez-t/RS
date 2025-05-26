@@ -49,10 +49,24 @@ export default function AdminDashboard() {
       </button>
 
       <button
+        onClick={() => router.push('/admin/users')}
+        className="cursor-pointer px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+      >
+        Comptes clients
+      </button>
+
+      <button
         onClick={() => router.push('/admin/send-email')}
         className="cursor-pointer px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
       >
         Envoyer un mail
+      </button>
+
+      <button
+        onClick={() => router.push('/admin/promo-codes')}
+        className="cursor-pointer px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+      >
+        Codes promo
       </button>
     </div>
   );

@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendReviewEmail(email) {
-  const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
+async function sendReviewEmail(email,orderId) {
+  const token = jwt.sign({ email,orderId }, JWT_SECRET, { expiresIn: '7d' });
 
     const reviewLink = `${process.env.FRONTEND_URL}/leave-review?token=${token}&email=${encodeURIComponent(email)}`;
 
