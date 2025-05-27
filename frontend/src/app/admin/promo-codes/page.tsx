@@ -14,6 +14,7 @@ export default function PromoCodesAdminPage() {
         credentials: 'include',
       });
       const data = await res.json();
+      console.log('✅ Codes promo reçus :', data); // ← console log ajouté
       setPromoCodes(data);
     } catch (err) {
       console.error('Erreur récupération codes promo :', err);
@@ -59,8 +60,15 @@ export default function PromoCodesAdminPage() {
             className="border border-gray-200 rounded-lg p-4 shadow"
           >
             <p className="font-semibold text-lg">{promo.code}</p>
-            <p className="text-sm">Réduction : {promo.discount}%</p>
-            <p className="text-sm text-gray-500">Valide jusqu’au : {new Date(promo.expiryDate).toLocaleDateString()}</p>
+            <p className="text-sm">
+              Réduction :{' '}
+              {promo.discountType === 'amount'
+                ? `${promo.value} €`
+                : `${promo.value} %`}
+            </p>
+            <p className="text-sm text-gray-500">
+              Valide jusqu’au : {new Date(promo.expiresAt).toLocaleDateString()}
+            </p>
           </div>
         ))}
       </div>

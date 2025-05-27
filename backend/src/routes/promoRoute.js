@@ -6,7 +6,7 @@ const isAdmin = require('../middleware/isAdmin')
 
 
 // 🔐 Créer un code promo
-router.post('/',verifyToken,isAdmin, async (req, res) => {
+router.post('/create',verifyToken,isAdmin, async (req, res) => {
   try {
     const code = new PromoCode(req.body);
     await code.save();

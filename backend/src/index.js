@@ -58,6 +58,9 @@ app.use('/orders', orderRoutes);
 const notes = require('./routes/NoteRoutes');
 app.use('/notes', notes);
 
+const promos = require('./routes/promoRoute');
+app.use('/promos', promos);
+
 // ⚠️ À NE PAS PARSER avec express.json()
 
 

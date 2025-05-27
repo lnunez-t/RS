@@ -7,7 +7,8 @@ export default function CreatePromoPage() {
   const router = useRouter();
   const [code, setCode] = useState('');
   const [discount, setDiscount] = useState(0);
-  const [expiryDate, setExpiryDate] = useState('');
+  const [discountType, setDiscountType] = useState<'percentage' | 'amount'>('percentage');
+  const [expiresAt, setExpiryDate] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,16 +29,16 @@ export default function CreatePromoPage() {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch('http://localhost:4338/promos', {
+      const res = await fetch('http://localhost:4338/promos/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ code, discount, expiryDate }),
+        body: JSON.stringify({ code, value: discount, discountType, expiresAt }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Erreur lors de la création');
       alert('Code promo créé.');
-      router.push('/admin/promos');
+      router.push('/admin/promo-codes');
     } catch (err) {
       console.error('Erreur création code promo :', err);
       alert('Erreur réseau');
@@ -79,7 +80,7 @@ export default function CreatePromoPage() {
         </div>
 
         <div>
-          <label className="block mb-1">Réduction (%)</label>
+          <label className="block mb-1">Réduction</label>
           <input
             type="number"
             value={discount}
@@ -89,10 +90,28 @@ export default function CreatePromoPage() {
         </div>
 
         <div>
+          <label className="block mb-1">Type de réduction</label>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setDiscountType('percentage')}
+              className={`px-4 py-2 rounded border ${discountType === 'percentage' ? 'bg-blue-600 text-white' : 'bg-white text-black'}`}
+            >
+              Pourcentage
+            </button>
+            <button
+              onClick={() => setDiscountType('amount')}
+              className={`px-4 py-2 rounded border ${discountType === 'amount' ? 'bg-blue-600 text-white' : 'bg-white text-black'}`}
+            >
+              Montant fixe
+            </button>
+          </div>
+        </div>
+
+        <div>
           <label className="block mb-1">Date d'expiration</label>
           <input
             type="date"
-            value={expiryDate}
+            value={expiresAt}
             onChange={(e) => setExpiryDate(e.target.value)}
             className="w-full px-4 py-2 border rounded"
           />
