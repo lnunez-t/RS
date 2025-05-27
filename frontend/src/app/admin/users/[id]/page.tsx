@@ -50,7 +50,7 @@ export default function UserDetailsPage() {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push('/admin/users')}
         className="text-blue-600 hover:underline"
       >
         ← Retour

@@ -58,6 +58,13 @@ export default function CreatePromoPage() {
 
   return (
     <div className="p-6 max-w-xl mx-auto space-y-6">
+      <button
+        onClick={() => router.push('/admin/promo-codes')}
+        className="text-blue-600 hover:underline"
+      >
+        ← Retour aux codes
+      </button>
+
       <h1 className="text-2xl font-bold">Créer un code promo</h1>
 
       <div className="space-y-4">

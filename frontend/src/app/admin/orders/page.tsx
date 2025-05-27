@@ -92,7 +92,7 @@ export default function OrderAdminPage() {
       <h1 className="text-2xl font-bold">Commandes clients</h1>
 
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push('/admin')}
         className="text-blue-600 underline mb-4"
       >
         ← Retour

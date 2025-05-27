@@ -83,7 +83,7 @@ export default function EditUserPage() {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push(`/admin/users/${user._id}`)}
         className="text-blue-600 hover:underline"
       >
         ← Retour

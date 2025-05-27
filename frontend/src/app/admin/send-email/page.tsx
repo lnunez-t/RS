@@ -65,6 +65,13 @@ export default function SendEmailPage() {
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow">
+      <button
+        onClick={() => router.push('/admin')}
+        className="text-blue-600 hover:underline mb-4"
+      >
+        ← Retour au admin
+      </button>
+
       <h1 className="text-xl font-bold mb-4">Envoyer un e-mail</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

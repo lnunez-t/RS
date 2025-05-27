@@ -121,14 +121,14 @@ export default function ProductAdminPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gestion des vêtements</h1>
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/admin')}
           className="text-blue-600 underline"
         >
           ← Retour
         </button>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Gestion des vêtements</h1>
       </div>
 
       <button

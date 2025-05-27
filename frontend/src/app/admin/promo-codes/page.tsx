@@ -63,7 +63,13 @@ export default function PromoCodesAdminPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Codes Promo</h1>
+        <button
+          onClick={() => router.push('/admin')}
+          className="text-blue-600 hover:underline"
+        >
+          ← Retour admin
+        </button>
+        <h1 className="text-2xl font-bold text-center flex-1">Codes Promo</h1>
         <button
           onClick={() => router.push('/admin/promo-codes/create')}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"

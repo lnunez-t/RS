@@ -199,7 +199,7 @@ export default function OrderDetailsPage() {
   return (
     <div className="p-6 space-y-6 print:bg-white print:text-black">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push('/admin/orders')}
         className="text-blue-600 hover:underline"
       >
         ← Retour
