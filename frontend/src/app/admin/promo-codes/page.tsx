@@ -14,12 +14,31 @@ export default function PromoCodesAdminPage() {
         credentials: 'include',
       });
       const data = await res.json();
-      console.log('✅ Codes promo reçus :', data); // ← console log ajouté
+      console.log('✅ Codes promo reçus :', data);
       setPromoCodes(data);
     } catch (err) {
       console.error('Erreur récupération codes promo :', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Supprimer ce code promo ?')) return;
+    try {
+      const res = await fetch(`http://localhost:4338/promos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Erreur serveur');
+      }
+      setPromoCodes(promoCodes.filter((code) => code._id !== id));
+      alert('Code promo supprimé.');
+    } catch (err) {
+      console.error('Erreur suppression code promo :', err);
+      alert('Erreur lors de la suppression');
     }
   };
 
@@ -57,8 +76,15 @@ export default function PromoCodesAdminPage() {
         {promoCodes.map((promo) => (
           <div
             key={promo._id}
-            className="border border-gray-200 rounded-lg p-4 shadow"
+            className="relative border border-gray-200 rounded-lg p-4 shadow"
           >
+            <button
+              onClick={() => handleDelete(promo._id)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-red-600"
+              title="Supprimer le code"
+            >
+              ✕
+            </button>
             <p className="font-semibold text-lg">{promo.code}</p>
             <p className="text-sm">
               Réduction :{' '}
