@@ -118,15 +118,15 @@ const NavbarSection = ({ children, className = '' }: { children?: React.ReactNod
 
           {/* RIGHT on mobile: icons */}
           <div className="md:hidden flex items-center space-x-4">
-            <button onClick={openCart} aria-label="panier">
-              <ShoppingCartIcon className="w-5 h-5 text-[#392e2c]" />
-              { cartItems.length > 0 && (
-              <span className="relative -top-3 -right-3 bg-[#000] text-white text-xs font-bold rounded-full h-4 w-4 flex justify-center shadow">
-                {cartItems.length}
-              </span>
-            )}
+            <button onClick={openCart} aria-label="panier" className="relative">
+              <ShoppingCartIcon className="w-6 h-6 text-[#392e2c]" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-black text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center shadow">
+                  {cartItems.length}
+                </span>
+              )}
             </button>
-            
+
             <button onClick={handleProfileClick} aria-label="profil">
               <UserIcon className="w-5 h-5 text-black" />
             </button>

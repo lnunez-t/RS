@@ -53,6 +53,8 @@ export default function ProductPage() {
     const { addToCart } = useCartContext();
     const router = useRouter();
     const [quantity, setQuantity] = useState<number>(1);
+    const [selectedImage, setSelectedImage] = useState<string>();
+
 
     const increaseQuantity = () => setQuantity(prev => prev + 1);
     const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
@@ -66,7 +68,7 @@ export default function ProductPage() {
     const handleAddToCart = () => {
         if (selectedProduct) {
             addToCart({
-                id: selectedProduct.id,
+                id: selectedProduct._id,
                 name: selectedProduct.name,
                 price: selectedProduct.price,
                 quantity,
@@ -75,9 +77,16 @@ export default function ProductPage() {
         }
     };
 
+    useEffect(() => {
+        if (selectedProduct?.images?.length > 0) {
+            setSelectedImage(selectedProduct.images[0]);
+        }
+    }, [selectedProduct]);
+
+
     const handleProductClick = (product: any) => {
         selectProduct(product);
-        router.push("/Product");
+        router.push(`/Product/${product._id}`);
     };
 
     if (!selectedProduct) return <div>Produit non trouvé</div>;
@@ -102,46 +111,31 @@ export default function ProductPage() {
 
                 {/* PRODUIT */}
                 <div className="flex flex-col md:flex-row gap-8 mb-16">
-                    {/* Image */}
-                    {/* <div className="flex justify-center md:w-1/2">
-                        <img
-                            className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-cover"
-                            alt={selectedProduct.name}
-                            src={selectedProduct.images}
-                        />
-                    </div> */}
+                    {/* Galerie d'images avec miniatures */}
+                    <div className="flex flex-col items-center md:w-1/2">
+                    {/* Image principale */}
+                    <img
+                        src={selectedImage}
+                        alt={selectedProduct.name}
+                        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-cover rounded-md shadow mb-4"
+                    />
 
-                    {/* Galerie d'images du produit */}
-                    <div className="flex justify-center md:w-1/2">
-                    <Carousel
-                        opts={{
-                        align: "start",
-                        loop: true,
-                        }}
-                        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
-                    >
-                        <CarouselContent>
+                    {/* Miniatures */}
+                    <div className="flex gap-2 overflow-x-auto">
                         {selectedProduct.images?.map((img: string, index: number) => (
-                            <CarouselItem key={index} className="flex justify-center">
-                            <img
-                                src={img}
-                                alt={`${selectedProduct.name} image ${index + 1}`}
-                                className="w-full h-auto object-cover rounded-md shadow"
-                            />
-                            </CarouselItem>
+                        <img
+                            key={index}
+                            src={img}
+                            alt={`${selectedProduct.name} miniature ${index + 1}`}
+                            className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 ${
+                            img === selectedImage ? "border-[#ffae9d]" : "border-transparent"
+                            }`}
+                            onClick={() => setSelectedImage(img)}
+                        />
                         ))}
-                        </CarouselContent>
-
-                        {/* Boutons navigation */}
-                        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
-                        <ChevronLeft className="w-6 h-6 text-[#392e2c]" />
-                        </CarouselPrevious>
-
-                        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-[#ffae9d] hover:bg-[#ffae9d] hover:text-white transition">
-                        <ChevronRight className="w-6 h-6 text-[#392e2c]" />
-                        </CarouselNext>
-                    </Carousel>
                     </div>
+                    </div>
+
 
 
                     {/* Infos */}

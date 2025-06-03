@@ -48,7 +48,7 @@ export default function ShopPage() {
   const handleProductClick = (product: any) => {
     selectProduct(product);
     console.log(product.image);
-    router.push("/Product");
+    router.push("/Product/[`${product}`]");
   };
 
   const handlePageChange = (newPage: number) => {
