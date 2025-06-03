@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <NavbarSection className="print:hidden" />
 
               {children}
-            <NewsletterSection className="print:hidden" />
+            {/* <NewsletterSection className="print:hidden" /> */}
             <FooterSection className="print:hidden" />
           </ProductProvider>
         </CartProvider>

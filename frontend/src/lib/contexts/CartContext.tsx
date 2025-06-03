@@ -1,13 +1,17 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 
 type CartItem = {
+  uuid?: string;
   id: string;
   name: string;
   price: number;
   quantity: number;
   image: string;
+  size?: string;
 };
 
 type CartContextType = {
@@ -29,18 +33,29 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (item: CartItem) => {
     setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
+      // Cherche un item similaire (même id + même taille)
+      const existing = prev.find(
+        (i) => i.id === item.id && i.size === item.size
+      );
+  
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
+          i.id === item.id && i.size === item.size
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
         );
       }
-      return [...prev, item];
+  
+      // Ajoute un nouvel item avec un uuid unique
+      return [...prev, { ...item, uuid: uuidv4() }];
     });
   };
+  
 
-  const removeFromCart = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (uuid: string) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.uuid !== uuid)
+    );
   };
 
   const clearCart = () => setCartItems([]);
@@ -48,10 +63,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
 
-  const updateCartItemQuantity = (id: string, quantity: number) => {
+  const updateCartItemQuantity = (uuid: string, quantity: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
+        item.uuid === uuid ? { ...item, quantity } : item
       )
     );
   };

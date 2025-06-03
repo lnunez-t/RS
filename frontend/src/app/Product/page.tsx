@@ -70,7 +70,7 @@ export default function ProductPage() {
                 name: selectedProduct.name,
                 price: selectedProduct.price,
                 quantity,
-                image: selectedProduct.image,
+                image: selectedProduct.images[0],
             });
         }
     };

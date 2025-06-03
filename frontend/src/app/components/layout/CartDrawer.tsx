@@ -1,4 +1,3 @@
-// components/CartDrawer.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -14,6 +13,8 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   const { cartItems, removeFromCart, updateCartItemQuantity } = useCart(); // adapte selon ta logique
   const router = useRouter();
   const totalUniqueItems = cartItems.length;
+
+  console.log(cartItems);
 
 
   const totalPrice = cartItems.reduce((total, item) => {
@@ -45,7 +46,7 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         {cartItems && cartItems.length > 0 ? (
           <ul className="space-y-4">
             {cartItems.map((item: any, index: number) => (
-              <li key={index} className="flex items-start space-x-4">
+              <li key={item.uuid} className="flex items-start space-x-4">
                 <img
                     className="w-[100px] h-[100px] object-cover"
                     alt={item.name}
@@ -57,7 +58,7 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                       {item.name}
                     </span>
                     <span className="[font-family:'Playfair_Display-Bold', Helvetica] font-bold text-[#392e2c] text-[15px]">
-                      {item.price}
+                      {item.price} €
                     </span>
                   </div>
 
@@ -73,7 +74,7 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                         variant="ghost" 
                         className="cursor-pointer h-4 w-4 p-0" 
                         onClick={() =>
-                          updateCartItemQuantity(item.id, item.quantity > 1 ? item.quantity - 1 : 1)}
+                          updateCartItemQuantity(item.uuid, item.quantity > 1 ? item.quantity - 1 : 1)}
                       >
                           <Minus className=" h-2 w-2" />
                       </Button>
@@ -83,14 +84,14 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                       <Button 
                         variant="ghost" 
                         className="cursor-pointer h-4 w-4 p-0" 
-                        onClick={() => updateCartItemQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateCartItemQuantity(item.uuid, item.quantity + 1)}
                       >
                           <Plus className=" h-2 w-2" />
                       </Button>
                     </div>
 
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.uuid)}
                       className="cursor-pointer text-red-500 hover:text-red-700 [font-family:'Playfair_Display-Bold', Helvetica] font-bold text-xs"
                     >
                       Retirer

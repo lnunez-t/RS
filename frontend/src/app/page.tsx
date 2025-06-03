@@ -3,6 +3,7 @@ import BestsellerSection from './components/home/BestsellerSection'
 import EngagementsSection from './components/home/EngagementsSection'
 import CollectionsSection from './components/home/CollectionsSection'
 import FeedbackSection from './components/home/FeedbackSection'
+import InstaPage from './components/home/InstaPage'
 
 export default function HomePage() {
     return (
@@ -12,6 +13,7 @@ export default function HomePage() {
             <EngagementsSection />
             <CollectionsSection />
             <FeedbackSection />
+            <InstaPage />
         </>
     );
 }
